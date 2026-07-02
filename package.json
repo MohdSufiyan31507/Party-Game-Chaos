@@ -1,0 +1,26 @@
+{
+  "name": "chaos-ka-adda-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "npm --workspace frontend run dev",
+    "dev:backend": "npm --workspace backend run dev",
+    "build": "npm --workspace frontend run build",
+    "build:backend": "npm --workspace backend run build",
+    "build:all": "npm run build:backend && npm run build",
+    "preview": "npm --workspace frontend run preview",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "npm --workspace backend run test",
+    "test:frontend": "npm --workspace frontend run test",
+    "validate:env": "node scripts/validate-env.mjs",
+    "check:secrets": "node scripts/check-no-secrets.mjs",
+    "generate:jwt-secret": "node scripts/generate-jwt-secret.mjs",
+    "verify:artifacts": "node scripts/verify-artifacts.mjs",
+    "smoke:production": "node scripts/production-smoke.mjs",
+    "ready": "npm run validate:env && npm run check:secrets && npm run test && npm run verify:artifacts && npm run smoke:production"
+  }
+}
