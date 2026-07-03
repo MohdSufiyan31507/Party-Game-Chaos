@@ -1,6 +1,6 @@
 import type { Server as HttpServer } from "node:http";
 import { Server, type Socket } from "socket.io";
-import { env } from "../config/env.js";
+import { isAllowedCorsOrigin } from "../config/cors.js";
 import { UserModel } from "../models/User.js";
 import { verifyAuthToken } from "../utils/jwt.js";
 
@@ -13,7 +13,9 @@ let io: Server | null = null;
 export function initSocketServer(httpServer: HttpServer) {
   io = new Server(httpServer, {
     cors: {
-      origin: env.clientUrl,
+      origin(origin, callback) {
+        callback(null, isAllowedCorsOrigin(origin));
+      },
       credentials: true,
     },
   });

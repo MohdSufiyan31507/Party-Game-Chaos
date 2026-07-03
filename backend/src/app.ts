@@ -1,7 +1,7 @@
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
-import { env } from "./config/env.js";
+import { isAllowedCorsOrigin } from "./config/cors.js";
 import { getConfigSummary } from "./utils/configSummary.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { roomRoutes } from "./routes/roomRoutes.js";
@@ -13,7 +13,9 @@ export function createApp() {
 
   app.use(
     cors({
-      origin: env.clientUrl,
+      origin(origin, callback) {
+        callback(null, isAllowedCorsOrigin(origin));
+      },
       credentials: true,
     }),
   );

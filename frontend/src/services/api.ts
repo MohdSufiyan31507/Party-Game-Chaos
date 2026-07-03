@@ -11,14 +11,20 @@ export async function apiRequest<T>(
   path: string,
   { token, headers, ...options }: RequestOptions = {},
 ) {
-  const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...headers,
-    },
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...headers,
+      },
+    });
+  } catch {
+    throw new Error("Could not reach the backend. Refresh once or wait for Render to wake up.");
+  }
 
   const data = await response.json().catch(() => null);
 
