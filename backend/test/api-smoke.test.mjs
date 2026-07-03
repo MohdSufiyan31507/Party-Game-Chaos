@@ -232,3 +232,44 @@ test("host can leave and the next player becomes host", async () => {
     await shutdown(server);
   }
 });
+
+test("placeholder games cannot be selected for live gameplay", async () => {
+  const { request, server } = await bootApi();
+  const createdUserIds = [];
+  let roomId;
+
+  try {
+    const host = await request("/auth/guest", {
+      method: "POST",
+      body: JSON.stringify({ username: `PlaceholderHost-${Date.now()}` }),
+    }).then((response) => response.json());
+    createdUserIds.push(host.user._id);
+    const hostAuth = { Authorization: `Bearer ${host.token}` };
+
+    const created = await request("/rooms", {
+      method: "POST",
+      headers: hostAuth,
+      body: JSON.stringify({ name: "Placeholder Test", maxPlayers: 4 }),
+    }).then((response) => response.json());
+    roomId = created.room._id;
+
+    await request(`/rooms/${created.room.code}/teams/lock`, {
+      method: "POST",
+      headers: hostAuth,
+    }).then((response) => response.json());
+
+    const response = await request(`/rooms/${created.room.code}/game`, {
+      method: "POST",
+      headers: hostAuth,
+      body: JSON.stringify({ gameId: "reverse-charades" }),
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.message, "This game is not playable yet");
+  } finally {
+    if (roomId) await RoomModel.deleteOne({ _id: roomId });
+    if (createdUserIds.length) await UserModel.deleteMany({ _id: { $in: createdUserIds } });
+    await shutdown(server);
+  }
+});

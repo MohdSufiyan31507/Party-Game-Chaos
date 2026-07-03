@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { promptsForGame } from "../data/gamePrompts.js";
+import { isPlayableGame, promptsForGame } from "../data/gamePrompts.js";
 import {
   RoomModel,
   type RoomDocument,
@@ -332,6 +332,10 @@ export async function selectGame(req: Request, res: Response) {
     throw new HttpError(400, "Game id is required");
   }
 
+  if (!isPlayableGame(gameId)) {
+    throw new HttpError(400, "This game is not playable yet");
+  }
+
   if (!room) {
     throw new HttpError(404, "Room not found");
   }
@@ -390,6 +394,10 @@ export async function startGameplay(req: Request, res: Response) {
 
   if (!room.selectedGameId || !room.selectedCategory) {
     throw new HttpError(400, "Select a game and category before starting");
+  }
+
+  if (!isPlayableGame(room.selectedGameId)) {
+    throw new HttpError(400, "This game is not playable yet");
   }
 
   room.gameplay = {
