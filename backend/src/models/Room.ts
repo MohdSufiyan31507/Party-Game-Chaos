@@ -15,6 +15,7 @@ export type RoomTeam = {
   name: string;
   accent: "red" | "blue";
   playerIds: string[];
+  memberNames?: string[];
 };
 
 export type GameplayState = {
@@ -95,6 +96,7 @@ const roomTeamSchema = new Schema<RoomTeam>(
     name: { type: String, required: true },
     accent: { type: String, enum: ["red", "blue"], required: true },
     playerIds: { type: [String], default: [] },
+    memberNames: { type: [String], default: [] },
   },
   { _id: false },
 );

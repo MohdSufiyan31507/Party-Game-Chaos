@@ -28,6 +28,17 @@ function readMaxPlayers(value: unknown) {
   return Math.min(Math.max(Math.round(parsed), 2), 16);
 }
 
+function readMemberNames(value: unknown) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map((item) => readString(item))
+    .filter(Boolean)
+    .slice(0, 12);
+}
+
 function serializeRoom(room: RoomDocument) {
   return room.toJSON();
 }
@@ -314,6 +325,54 @@ export async function lockTeams(req: Request, res: Response) {
     ];
   }
 
+  room.teamsLocked = true;
+  room.status = "game-selection";
+  await room.save();
+  emitRoomUpdated(room.code);
+
+  res.json({ room: serializeRoom(room) });
+}
+
+export async function setupLocalTeams(req: Request, res: Response) {
+  const user = requireCurrentUser(req);
+  const code = roomCodeParam(req);
+  const room = await RoomModel.findOne({ code });
+
+  if (!room) {
+    throw new HttpError(404, "Room not found");
+  }
+
+  requireHost(room, user._id.toString());
+
+  if (room.gameplay?.isActive) {
+    throw new HttpError(400, "Cannot change teams during active gameplay");
+  }
+
+  const redName = readString(req.body.redTeamName) || "Red Team";
+  const blueName = readString(req.body.blueTeamName) || "Blue Team";
+  const redMembers = readMemberNames(req.body.redMembers);
+  const blueMembers = readMemberNames(req.body.blueMembers);
+
+  if (!redMembers.length || !blueMembers.length) {
+    throw new HttpError(400, "Add at least one member to each team");
+  }
+
+  room.teams = [
+    {
+      id: "red",
+      name: redName.slice(0, 32),
+      accent: "red",
+      playerIds: [user._id.toString()],
+      memberNames: redMembers,
+    },
+    {
+      id: "blue",
+      name: blueName.slice(0, 32),
+      accent: "blue",
+      playerIds: [],
+      memberNames: blueMembers,
+    },
+  ];
   room.teamsLocked = true;
   room.status = "game-selection";
   await room.save();

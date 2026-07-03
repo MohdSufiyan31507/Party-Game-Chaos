@@ -11,6 +11,7 @@ import {
   resetRoom,
   selectCategory,
   selectGame,
+  setupLocalTeams,
   nextRound,
   startGameplay,
   submitGameplayAction,
@@ -30,6 +31,7 @@ roomRoutes.post("/:code/leave", asyncHandler(leaveRoom));
 roomRoutes.patch("/:code/status", asyncHandler(updateRoomStatus));
 roomRoutes.post("/:code/teams/randomize", asyncHandler(randomizeTeams));
 roomRoutes.post("/:code/teams/lock", asyncHandler(lockTeams));
+roomRoutes.post("/:code/teams/local", asyncHandler(setupLocalTeams));
 roomRoutes.post("/:code/game", asyncHandler(selectGame));
 roomRoutes.post("/:code/category", asyncHandler(selectCategory));
 roomRoutes.post("/:code/gameplay/start", asyncHandler(startGameplay));

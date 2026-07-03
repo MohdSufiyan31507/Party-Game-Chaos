@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 export const homeActions = [
-  { label: "Play Now", href: "/games", icon: Gamepad2, tone: "cyan" as const },
+  { label: "Play Now", href: "/local-teams", icon: Gamepad2, tone: "cyan" as const },
   { label: "Host a Party", href: "/rooms/create", icon: PlusCircle, tone: "pink" as const },
   { label: "Join the Chaos", href: "/rooms/join", icon: LogIn, tone: "orange" as const },
   { label: "Profile", href: "/profile", icon: UserRound, tone: "green" as const },

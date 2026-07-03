@@ -57,6 +57,23 @@ export function lockTeamsRequest(token: string, code: string) {
   });
 }
 
+export function setupLocalTeamsRequest(
+  token: string,
+  code: string,
+  payload: {
+    redTeamName: string;
+    blueTeamName: string;
+    redMembers: string[];
+    blueMembers: string[];
+  },
+) {
+  return apiRequest<{ room: Room }>(`/rooms/${code}/teams/local`, {
+    method: "POST",
+    token,
+    body: JSON.stringify(payload),
+  });
+}
+
 export function selectGameRequest(token: string, code: string, gameId: string) {
   return apiRequest<{ room: Room }>(`/rooms/${code}/game`, {
     method: "POST",

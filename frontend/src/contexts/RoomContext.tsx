@@ -18,6 +18,7 @@ import {
   randomizeTeamsRequest,
   selectCategoryRequest,
   selectGameRequest,
+  setupLocalTeamsRequest,
   startGameplayRequest,
   submitGameplayActionRequest,
   switchGameplayTeamRequest,
@@ -42,6 +43,15 @@ type RoomContextValue = {
   updateRoomStatus: (code: string, status: RoomStatus) => Promise<Room>;
   randomizeTeams: (code: string) => Promise<Room>;
   lockTeams: (code: string) => Promise<Room>;
+  setupLocalTeams: (
+    code: string,
+    payload: {
+      redTeamName: string;
+      blueTeamName: string;
+      redMembers: string[];
+      blueMembers: string[];
+    },
+  ) => Promise<Room>;
   selectGame: (code: string, gameId: string) => Promise<Room>;
   selectCategory: (code: string, category: string) => Promise<Room>;
   startGameplay: (code: string) => Promise<Room>;
@@ -175,6 +185,28 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       setIsRoomLoading(true);
       try {
         const response = await lockTeamsRequest(requireToken(), code);
+        rememberRoom(response.room);
+        return response.room;
+      } finally {
+        setIsRoomLoading(false);
+      }
+    },
+    [requireToken],
+  );
+
+  const setupLocalTeams = useCallback(
+    async (
+      code: string,
+      payload: {
+        redTeamName: string;
+        blueTeamName: string;
+        redMembers: string[];
+        blueMembers: string[];
+      },
+    ) => {
+      setIsRoomLoading(true);
+      try {
+        const response = await setupLocalTeamsRequest(requireToken(), code, payload);
         rememberRoom(response.room);
         return response.room;
       } finally {
@@ -322,6 +354,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       updateRoomStatus,
       randomizeTeams,
       lockTeams,
+      setupLocalTeams,
       selectGame,
       selectCategory,
       startGameplay,
@@ -351,6 +384,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       resetRoom,
       selectCategory,
       selectGame,
+      setupLocalTeams,
       socketState,
       startGameplay,
       submitGameplayAction,

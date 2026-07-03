@@ -13,6 +13,7 @@ export type RoomTeam = {
   name: string;
   accent: "red" | "blue";
   playerIds: string[];
+  memberNames?: string[];
 };
 
 export type GameplayState = {

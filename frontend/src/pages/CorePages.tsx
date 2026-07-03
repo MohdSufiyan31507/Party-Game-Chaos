@@ -10,6 +10,7 @@ import {
   PlusCircle,
   Shuffle,
   SkipForward,
+  UsersRound,
   Trophy,
 } from "lucide-react";
 import { Button } from "../components/ui/Button";
@@ -117,6 +118,104 @@ export function JoinRoomPage() {
           {error ? <p className="text-sm font-bold text-punch">{error}</p> : null}
           <Button tone="orange" className="w-full" disabled={isRoomLoading}>
             {isRoomLoading ? "Joining" : "Join Lobby"}
+          </Button>
+        </form>
+      </Panel>
+    </PageScaffold>
+  );
+}
+
+function namesFromTextarea(value: string) {
+  return value
+    .split(/[\n,]+/)
+    .map((name) => name.trim())
+    .filter(Boolean)
+    .slice(0, 12);
+}
+
+export function LocalTeamSetupPage() {
+  const navigate = useNavigate();
+  const { createRoom, isRoomLoading, setupLocalTeams } = useRoom();
+  const [error, setError] = useState("");
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError("");
+
+    const form = event.currentTarget;
+    const redMembers = namesFromTextarea(formValue(form, "redMembers"));
+    const blueMembers = namesFromTextarea(formValue(form, "blueMembers"));
+
+    if (!redMembers.length || !blueMembers.length) {
+      setError("Add at least one member to each team.");
+      return;
+    }
+
+    try {
+      const room = await createRoom({
+        name: formValue(form, "roomName") || "One Device Adda",
+        maxPlayers: 2,
+      });
+      await setupLocalTeams(room.code, {
+        redTeamName: formValue(form, "redTeamName") || "Red Team",
+        blueTeamName: formValue(form, "blueTeamName") || "Blue Team",
+        redMembers,
+        blueMembers,
+      });
+      navigate("/games");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not create local teams");
+    }
+  }
+
+  return (
+    <PageScaffold
+      title="Create Local Teams"
+      eyebrow="One Device Mode"
+      subtitle="The person creating this setup is the host. Add team names and members, then pass the device around."
+    >
+      <Panel>
+        <form className="grid gap-5 lg:grid-cols-2" onSubmit={handleSubmit}>
+          <div className="lg:col-span-2">
+            <Field label="Room Name" name="roomName" placeholder="Friday Adda" />
+          </div>
+          <Field label="Team 1 Name" name="redTeamName" placeholder="Team Bawaal" defaultValue="Red Team" />
+          <Field label="Team 2 Name" name="blueTeamName" placeholder="Team Dhamaka" defaultValue="Blue Team" />
+          <label className="block">
+            <span className="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-white/50">
+              Team 1 Members
+            </span>
+            <textarea
+              name="redMembers"
+              required
+              rows={6}
+              placeholder={"Sufiyan\nAmaan\nZoya"}
+              className="w-full rounded-lg border border-white/12 bg-white/8 px-4 py-3 text-white outline-none placeholder:text-white/30 focus:border-surge/70 focus:ring-4 focus:ring-surge/10"
+            />
+          </label>
+          <label className="block">
+            <span className="mb-2 block text-xs font-black uppercase tracking-[0.2em] text-white/50">
+              Team 2 Members
+            </span>
+            <textarea
+              name="blueMembers"
+              required
+              rows={6}
+              placeholder={"Rehan\nSara\nKabir"}
+              className="w-full rounded-lg border border-white/12 bg-white/8 px-4 py-3 text-white outline-none placeholder:text-white/30 focus:border-surge/70 focus:ring-4 focus:ring-surge/10"
+            />
+          </label>
+          <p className="text-sm font-bold text-white/54 lg:col-span-2">
+            Put each member on a new line, or separate names with commas. Everyone can play from this one device.
+          </p>
+          {error ? <p className="text-sm font-bold text-punch lg:col-span-2">{error}</p> : null}
+          <Button
+            icon={UsersRound}
+            tone="cyan"
+            className="lg:col-span-2"
+            disabled={isRoomLoading}
+          >
+            {isRoomLoading ? "Creating Teams" : "Create Teams"}
           </Button>
         </form>
       </Panel>
@@ -294,6 +393,7 @@ export function TeamSetupPage() {
       playerIds: room?.players
         .filter((_, index) => index % 2 === 0)
         .map((player) => player.user) ?? [],
+      memberNames: [],
     },
     {
       id: "blue",
@@ -302,6 +402,7 @@ export function TeamSetupPage() {
       playerIds: room?.players
         .filter((_, index) => index % 2 === 1)
         .map((player) => player.user) ?? [],
+      memberNames: [],
     },
   ] as const;
   const teams =
@@ -358,7 +459,13 @@ export function TeamSetupPage() {
               {team.name}
             </h2>
             <div className="mt-5 space-y-3">
-              {team.playerIds.length ? (
+              {(team.memberNames?.length ?? 0) > 0 ? (
+                team.memberNames?.map((memberName) => (
+                  <div key={memberName} className="rounded-lg bg-white/8 p-3 font-bold">
+                    {memberName}
+                  </div>
+                ))
+              ) : team.playerIds.length ? (
                 team.playerIds.map((playerId) => (
                   <div key={playerId} className="rounded-lg bg-white/8 p-3 font-bold">
                     {playerById.get(playerId)?.username ?? "Unknown Player"}

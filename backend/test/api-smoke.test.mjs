@@ -307,3 +307,47 @@ test("placeholder games cannot be selected for live gameplay", async () => {
     await shutdown(server);
   }
 });
+
+test("host can create one-device local teams", async () => {
+  const { request, server } = await bootApi();
+  let userId;
+  let roomId;
+
+  try {
+    const host = await request("/auth/guest", {
+      method: "POST",
+      body: JSON.stringify({ username: `LocalHost-${Date.now()}` }),
+    }).then((response) => response.json());
+    userId = host.user._id;
+    const hostAuth = { Authorization: `Bearer ${host.token}` };
+
+    const created = await request("/rooms", {
+      method: "POST",
+      headers: hostAuth,
+      body: JSON.stringify({ name: "One Device Test", maxPlayers: 2 }),
+    }).then((response) => response.json());
+    roomId = created.room._id;
+
+    const localTeams = await request(`/rooms/${created.room.code}/teams/local`, {
+      method: "POST",
+      headers: hostAuth,
+      body: JSON.stringify({
+        redTeamName: "Team Bawaal",
+        blueTeamName: "Team Dhamaka",
+        redMembers: ["Ayaan", "Sara"],
+        blueMembers: ["Kabir", "Zoya"],
+      }),
+    }).then((response) => response.json());
+
+    assert.equal(localTeams.room.status, "game-selection");
+    assert.equal(localTeams.room.teamsLocked, true);
+    assert.equal(localTeams.room.teams[0].name, "Team Bawaal");
+    assert.deepEqual(localTeams.room.teams[0].memberNames, ["Ayaan", "Sara"]);
+    assert.equal(localTeams.room.teams[1].name, "Team Dhamaka");
+    assert.deepEqual(localTeams.room.teams[1].memberNames, ["Kabir", "Zoya"]);
+  } finally {
+    if (roomId) await RoomModel.deleteOne({ _id: roomId });
+    if (userId) await UserModel.deleteOne({ _id: userId });
+    await shutdown(server);
+  }
+});
