@@ -18,11 +18,15 @@ export function SplashPage() {
         <p className="text-sm font-black uppercase tracking-[0.38em] text-white/55">
           Presented by
         </p>
-        <h1 className="mt-4 text-5xl font-black leading-none sm:text-8xl">
+        <p className="mt-4 text-2xl font-black uppercase tracking-[0.24em] text-surge sm:text-4xl">
           The Chaos Games
+        </p>
+        <h1 className="mt-5 text-5xl font-black leading-none sm:text-8xl">
+          Chaos Ka Adda
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/68">
-          Chaos Ka Adda is a neon local mock party platform shell.
+          A live multiplayer party game platform for rooms, teams, chaos cards,
+          scoring drama, and post-2000 pop-culture games.
         </p>
         <div className="mt-9 flex justify-center">
           <Button to="/landing" icon={Sparkles} tone="pink">

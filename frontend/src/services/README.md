@@ -1,3 +1,5 @@
-Milestone 1 uses mock/local data only.
+Frontend service modules for Chaos Ka Adda.
 
-No backend services, API keys, external AI SDKs, or external AI calls are used.
+These wrappers call the Express backend for auth, rooms, users, store actions,
+and live room gameplay. No external AI SDKs, paid APIs, or embedded secrets are
+used.

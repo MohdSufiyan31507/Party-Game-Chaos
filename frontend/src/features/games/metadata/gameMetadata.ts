@@ -46,8 +46,8 @@ function createGame(
         : ["Placeholder metadata is ready.", "Advanced gameplay can plug in later."],
     tutorial:
       status === "MVP"
-        ? ["Pick the game.", "Start the local demo.", "Use Correct/Skip to cycle prompts."]
-        : ["This game has architecture, metadata, and sample data only for Milestone 1."],
+        ? ["Pick the game.", "Start the live room round.", "Use Correct/Skip to cycle prompts."]
+        : ["This game has architecture, metadata, and sample data ready for future live expansion."],
     categories,
     supportedModes: ["free_for_all", "team_vs_team"],
     scoringRules,

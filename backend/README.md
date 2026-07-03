@@ -1,6 +1,7 @@
 # Chaos Ka Adda Backend
 
-Milestone 16 backend for Chaos Ka Adda.
+Express, MongoDB, and Socket.IO backend for **Chaos Ka Adda**, presented by
+**The Chaos Games**.
 
 ## Includes
 

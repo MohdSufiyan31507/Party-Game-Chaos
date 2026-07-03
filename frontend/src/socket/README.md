@@ -1,3 +1,4 @@
-Socket.IO is intentionally not implemented in Milestone 1.
+Socket.IO client setup for Chaos Ka Adda.
 
-Realtime rooms begin in later milestones after approval.
+The client authenticates with the JWT token, joins active room channels, and
+listens for room update broadcasts from the backend.
