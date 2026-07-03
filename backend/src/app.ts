@@ -24,6 +24,10 @@ export function createApp() {
     res.json({ ok: true, service: "chaos-ka-adda-api" });
   });
 
+  app.get("/healthz", (_req, res) => {
+    res.json({ ok: true, service: "chaos-ka-adda-api" });
+  });
+
   app.get("/api/config-check", (_req, res) => {
     res.json({ ok: true, config: getConfigSummary() });
   });

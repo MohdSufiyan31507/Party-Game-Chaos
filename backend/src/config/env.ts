@@ -14,7 +14,10 @@ function readEnv(name: string, fallback?: string) {
 
 export const env = {
   port: Number(process.env.PORT ?? 4000),
-  mongoUri: readEnv("MONGO_URI", "mongodb://127.0.0.1:27017/chaos-ka-adda"),
+  mongoUri:
+    process.env.MONGO_URI ??
+    process.env.MONGODB_URI ??
+    "mongodb://127.0.0.1:27017/chaos-ka-adda",
   jwtSecret: readEnv("JWT_SECRET"),
   clientUrl: readEnv("CLIENT_URL", "http://127.0.0.1:5173"),
 };
