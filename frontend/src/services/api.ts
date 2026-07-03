@@ -1,4 +1,7 @@
-const API_URL = import.meta.env.VITE_API_URL ?? "http://127.0.0.1:4000/api";
+const rawApiUrl = import.meta.env.VITE_API_URL ?? "http://127.0.0.1:4000/api";
+const API_URL = rawApiUrl.replace(/\/$/, "").endsWith("/api")
+  ? rawApiUrl.replace(/\/$/, "")
+  : `${rawApiUrl.replace(/\/$/, "")}/api`;
 
 type RequestOptions = RequestInit & {
   token?: string | null;
