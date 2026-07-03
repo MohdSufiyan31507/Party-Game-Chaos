@@ -89,6 +89,13 @@ function teamName(room: RoomDocument, teamId: "red" | "blue") {
   return room.teams.find((team) => team.id === teamId)?.name ?? `${teamId} Team`;
 }
 
+function removePlayerFromTeams(room: RoomDocument, userId: string) {
+  room.teams = room.teams.map((team) => ({
+    ...team,
+    playerIds: team.playerIds.filter((playerId) => playerId !== userId),
+  }));
+}
+
 async function updatePlayerStats(room: RoomDocument, winnerTeamId: "red" | "blue" | "draw") {
   const scores = room.gameplay?.scores ?? { red: 0, blue: 0 };
 
@@ -181,6 +188,45 @@ export async function joinRoom(req: Request, res: Response) {
   }
 
   res.json({ room: serializeRoom(room) });
+}
+
+export async function leaveRoom(req: Request, res: Response) {
+  const user = requireCurrentUser(req);
+  const code = roomCodeParam(req);
+  const room = await RoomModel.findOne({ code });
+
+  if (!room) {
+    throw new HttpError(404, "Room not found");
+  }
+
+  const userId = user._id.toString();
+  const playerIndex = room.players.findIndex((player) => player.user.toString() === userId);
+
+  if (playerIndex === -1) {
+    throw new HttpError(400, "You are not in this room");
+  }
+
+  const wasHost = room.host.toString() === userId;
+  room.players.splice(playerIndex, 1);
+  removePlayerFromTeams(room, userId);
+
+  if (room.players.length === 0) {
+    await RoomModel.deleteOne({ _id: room._id });
+    emitRoomUpdated(room.code);
+    res.json({ left: true, deleted: true, room: null });
+    return;
+  }
+
+  if (wasHost) {
+    const nextHost = room.players[0];
+    nextHost.role = "host";
+    room.host = nextHost.user;
+  }
+
+  await room.save();
+  emitRoomUpdated(room.code);
+
+  res.json({ left: true, deleted: false, room: serializeRoom(room) });
 }
 
 export async function getRoom(req: Request, res: Response) {

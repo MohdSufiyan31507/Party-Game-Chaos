@@ -6,6 +6,7 @@ import {
   CheckCircle2,
   Copy,
   Home,
+  LogOut,
   PlusCircle,
   Shuffle,
   SkipForward,
@@ -127,7 +128,7 @@ export function LobbyPage() {
   const navigate = useNavigate();
   const { code } = useParams();
   const { user } = useAuth();
-  const { activeRoom, isRoomLoading, loadRoom, socketState, updateRoomStatus } = useRoom();
+  const { activeRoom, isRoomLoading, leaveRoom, loadRoom, socketState, updateRoomStatus } = useRoom();
   const [error, setError] = useState("");
   const [copyLabel, setCopyLabel] = useState("Copy");
 
@@ -157,6 +158,17 @@ export function LobbyPage() {
       navigate(`/teams/${activeRoom.code}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Only the host can start setup");
+    }
+  }
+
+  async function handleLeaveRoom() {
+    if (!activeRoom) return;
+
+    try {
+      await leaveRoom(activeRoom.code);
+      navigate("/home");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not leave room");
     }
   }
 
@@ -207,6 +219,16 @@ export function LobbyPage() {
           </p>
           <Button icon={Copy} tone="ghost" type="button" className="mt-5" onClick={handleCopy}>
             {copyLabel}
+          </Button>
+          <Button
+            icon={LogOut}
+            tone="ghost"
+            type="button"
+            className="ml-0 mt-3 sm:ml-3"
+            disabled={isRoomLoading}
+            onClick={handleLeaveRoom}
+          >
+            Leave Room
           </Button>
           {error ? <p className="mt-4 text-sm font-bold text-punch">{error}</p> : null}
         </Panel>

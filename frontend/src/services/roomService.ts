@@ -20,6 +20,13 @@ export function joinRoomRequest(token: string, payload: { code: string }) {
   });
 }
 
+export function leaveRoomRequest(token: string, code: string) {
+  return apiRequest<{ left: true; deleted: boolean; room: Room | null }>(`/rooms/${code}/leave`, {
+    method: "POST",
+    token,
+  });
+}
+
 export function fetchRoomRequest(token: string, code: string) {
   return apiRequest<{ room: Room }>(`/rooms/${code}`, { token });
 }

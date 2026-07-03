@@ -182,3 +182,53 @@ test("store purchase spends coins and records ownership", async () => {
     await shutdown(server);
   }
 });
+
+test("host can leave and the next player becomes host", async () => {
+  const { request, server } = await bootApi();
+  const createdUserIds = [];
+  let roomId;
+
+  try {
+    const host = await request("/auth/guest", {
+      method: "POST",
+      body: JSON.stringify({ username: `LeaveHost-${Date.now()}` }),
+    }).then((response) => response.json());
+    createdUserIds.push(host.user._id);
+    const hostAuth = { Authorization: `Bearer ${host.token}` };
+
+    const guest = await request("/auth/guest", {
+      method: "POST",
+      body: JSON.stringify({ username: `LeaveGuest-${Date.now()}` }),
+    }).then((response) => response.json());
+    createdUserIds.push(guest.user._id);
+    const guestAuth = { Authorization: `Bearer ${guest.token}` };
+
+    const created = await request("/rooms", {
+      method: "POST",
+      headers: hostAuth,
+      body: JSON.stringify({ name: "Leave Test", maxPlayers: 4 }),
+    }).then((response) => response.json());
+    roomId = created.room._id;
+
+    await request("/rooms/join", {
+      method: "POST",
+      headers: guestAuth,
+      body: JSON.stringify({ code: created.room.code }),
+    }).then((response) => response.json());
+
+    const left = await request(`/rooms/${created.room.code}/leave`, {
+      method: "POST",
+      headers: hostAuth,
+    }).then((response) => response.json());
+
+    assert.equal(left.left, true);
+    assert.equal(left.deleted, false);
+    assert.equal(left.room.host, guest.user._id);
+    assert.equal(left.room.players.length, 1);
+    assert.equal(left.room.players[0].role, "host");
+  } finally {
+    if (roomId) await RoomModel.deleteOne({ _id: roomId });
+    if (createdUserIds.length) await UserModel.deleteMany({ _id: { $in: createdUserIds } });
+    await shutdown(server);
+  }
+});

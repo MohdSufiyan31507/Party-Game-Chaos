@@ -85,8 +85,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
               {narratorFor(location.pathname)}
             </p>
             <p className="mt-4 text-sm leading-6 text-white/62">
-              Milestone 2 auth shell. Backend login is live, while rooms,
-              realtime, and game sessions stay local until the next milestone.
+              Live rooms, team setup, realtime gameplay, and scores are running
+              through the full-stack party engine.
             </p>
           </div>
         </aside>

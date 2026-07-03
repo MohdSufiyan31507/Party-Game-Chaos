@@ -5,6 +5,7 @@ import {
   finishGame,
   getRoom,
   joinRoom,
+  leaveRoom,
   lockTeams,
   randomizeTeams,
   resetRoom,
@@ -25,6 +26,7 @@ roomRoutes.use(requireAuth);
 roomRoutes.post("/", asyncHandler(createRoom));
 roomRoutes.post("/join", asyncHandler(joinRoom));
 roomRoutes.get("/:code", asyncHandler(getRoom));
+roomRoutes.post("/:code/leave", asyncHandler(leaveRoom));
 roomRoutes.patch("/:code/status", asyncHandler(updateRoomStatus));
 roomRoutes.post("/:code/teams/randomize", asyncHandler(randomizeTeams));
 roomRoutes.post("/:code/teams/lock", asyncHandler(lockTeams));

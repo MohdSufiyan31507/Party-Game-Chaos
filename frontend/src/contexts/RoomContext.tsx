@@ -13,6 +13,7 @@ import {
   fetchRoomRequest,
   finishGameRequest,
   joinRoomRequest,
+  leaveRoomRequest,
   lockTeamsRequest,
   randomizeTeamsRequest,
   selectCategoryRequest,
@@ -36,6 +37,7 @@ type RoomContextValue = {
   socketState: "offline" | "connecting" | "online";
   createRoom: (payload: { name: string; maxPlayers: number }) => Promise<Room>;
   joinRoom: (payload: { code: string }) => Promise<Room>;
+  leaveRoom: (code: string) => Promise<Room | null>;
   loadRoom: (code: string) => Promise<Room>;
   updateRoomStatus: (code: string, status: RoomStatus) => Promise<Room>;
   randomizeTeams: (code: string) => Promise<Room>;
@@ -71,6 +73,11 @@ export function RoomProvider({ children }: { children: ReactNode }) {
   const rememberRoom = useCallback((room: Room) => {
     localStorage.setItem(ACTIVE_ROOM_KEY, room.code);
     setActiveRoom(room);
+  }, []);
+
+  const forgetRoom = useCallback(() => {
+    localStorage.removeItem(ACTIVE_ROOM_KEY);
+    setActiveRoom(null);
   }, []);
 
   const createRoom = useCallback(
@@ -113,6 +120,26 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       }
     },
     [requireToken],
+  );
+
+  const leaveRoom = useCallback(
+    async (code: string) => {
+      setIsRoomLoading(true);
+      try {
+        const response = await leaveRoomRequest(requireToken(), code);
+
+        if (response.room) {
+          rememberRoom(response.room);
+        } else {
+          forgetRoom();
+        }
+
+        return response.room;
+      } finally {
+        setIsRoomLoading(false);
+      }
+    },
+    [forgetRoom, rememberRoom, requireToken],
   );
 
   const updateRoomStatus = useCallback(
@@ -290,6 +317,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       socketState,
       createRoom,
       joinRoom,
+      leaveRoom,
       loadRoom,
       updateRoomStatus,
       randomizeTeams,
@@ -304,8 +332,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       finishGame,
       resetRoom,
       clearRoom: () => {
-        localStorage.removeItem(ACTIVE_ROOM_KEY);
-        setActiveRoom(null);
+        forgetRoom();
       },
     }),
     [
@@ -313,13 +340,14 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       createRoom,
       endRound,
       finishGame,
+      forgetRoom,
       isRoomLoading,
       joinRoom,
+      leaveRoom,
       loadRoom,
       lockTeams,
       nextRound,
       randomizeTeams,
-      rememberRoom,
       resetRoom,
       selectCategory,
       selectGame,
@@ -334,6 +362,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!token) {
       disconnectSocket();
+      forgetRoom();
       setSocketState("offline");
       return;
     }
@@ -356,7 +385,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       socket.off("connect", handleConnect);
       socket.off("disconnect", handleDisconnect);
     };
-  }, [token]);
+  }, [forgetRoom, token]);
 
   useEffect(() => {
     if (!token || activeRoom) return;
