@@ -196,7 +196,8 @@ export function AboutPage() {
         <p className="max-w-3xl text-lg leading-8 text-white/68">
           Chaos Ka Adda is a dark-neon multiplayer party game platform with local narrator lines,
           no external AI APIs, MongoDB-backed auth, rooms, realtime play, and persistent player
-          progress.
+          progress. The purple genie is the official mascot of the game, dealing chaos cards and
+          carrying the Adda's party energy across the experience.
         </p>
       </Panel>
     </PageScaffold>

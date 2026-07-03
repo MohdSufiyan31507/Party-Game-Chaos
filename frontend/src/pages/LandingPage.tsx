@@ -10,7 +10,7 @@ export function LandingPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(182,55,255,0.32),transparent_28%),radial-gradient(circle_at_78%_12%,rgba(255,157,46,0.20),transparent_30%),linear-gradient(135deg,#070817,#15113A_55%,#25112A)]" />
         <img
           src={gameImage}
-          alt="Chaos Ka Adda game artwork"
+          alt="Chaos Ka Adda genie mascot holding chaos cards"
           className="absolute bottom-0 right-0 h-[70vh] max-h-[760px] w-full object-contain object-bottom opacity-35 drop-shadow-[0_0_48px_rgba(182,55,255,0.42)] sm:h-[82vh] sm:w-[58vw] sm:opacity-80"
         />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,#070817_0%,rgba(7,8,23,0.92)_34%,rgba(7,8,23,0.35)_100%)]" />
@@ -24,7 +24,7 @@ export function LandingPage() {
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-white/68">
             Live multiplayer rooms, guest runs, account login, team-vs-team scoring,
-            and realtime party game chaos.
+            and realtime party game chaos led by the Adda's genie mascot.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Button to="/guest" icon={Play} tone="cyan">Quick Guest</Button>

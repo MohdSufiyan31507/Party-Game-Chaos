@@ -15,7 +15,7 @@ export function SplashPage() {
       >
         <img
           src={gameImage}
-          alt="Chaos Ka Adda game artwork"
+          alt="Chaos Ka Adda genie mascot holding chaos cards"
           className="mx-auto mb-6 h-64 w-64 rounded-lg object-contain drop-shadow-[0_0_42px_rgba(182,55,255,0.45)] sm:h-80 sm:w-80"
         />
         <p className="text-sm font-black uppercase tracking-[0.38em] text-white/55">
@@ -28,8 +28,8 @@ export function SplashPage() {
           Chaos Ka Adda
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/68">
-          A live multiplayer party game platform for rooms, teams, chaos cards,
-          scoring drama, and post-2000 pop-culture games.
+          Meet the genie mascot of the Adda, your chaos dealer for rooms, teams,
+          chaos cards, scoring drama, and post-2000 pop-culture games.
         </p>
         <div className="mt-9 flex justify-center">
           <Button to="/landing" icon={Sparkles} tone="pink">
