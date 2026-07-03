@@ -189,7 +189,7 @@ export function LocalTeamSetupPage() {
               name="redMembers"
               required
               rows={6}
-              placeholder={"Sufiyan\nAmaan\nZoya"}
+              placeholder={"Aditya\nLakshya\nUrmil\nSufiyan\nGayatri"}
               className="w-full rounded-lg border border-white/12 bg-white/8 px-4 py-3 text-white outline-none placeholder:text-white/30 focus:border-surge/70 focus:ring-4 focus:ring-surge/10"
             />
           </label>
@@ -201,7 +201,7 @@ export function LocalTeamSetupPage() {
               name="blueMembers"
               required
               rows={6}
-              placeholder={"Rehan\nSara\nKabir"}
+              placeholder={"Ayush\nTanmay\nGargi\nSagar"}
               className="w-full rounded-lg border border-white/12 bg-white/8 px-4 py-3 text-white outline-none placeholder:text-white/30 focus:border-surge/70 focus:ring-4 focus:ring-surge/10"
             />
           </label>
