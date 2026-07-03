@@ -567,10 +567,23 @@ export function GameIntroPage() {
     ? getGameById(activeRoom.selectedGameId) ?? getPlayableGames()[0]
     : getPlayableGames()[0];
   const isHost = Boolean(activeRoom && user && activeRoom.host === user._id);
+  const canStartLiveGame = Boolean(
+    activeRoom?.selectedGameId && activeRoom.selectedCategory && game.status === "MVP",
+  );
 
   async function handleStartGameplay() {
     if (!activeRoom) {
       setError("Create or join a room before starting");
+      return;
+    }
+
+    if (game.status !== "MVP") {
+      setError("This game is a placeholder. Choose an MVP game to play live.");
+      return;
+    }
+
+    if (!activeRoom.selectedCategory) {
+      setError("Select a category before starting");
       return;
     }
 
@@ -591,10 +604,12 @@ export function GameIntroPage() {
       subtitle={activeRoom ? `Room ${activeRoom.code}` : undefined}
     >
       <Panel>
-        <StatusNote tone={isHost ? "success" : "info"}>
-          {isHost
-            ? "Start Game creates the backend round and sends everyone to the live gameplay screen."
-            : "Read the rules while the host starts the game."}
+        <StatusNote tone={game.status === "MVP" ? (isHost ? "success" : "info") : "warn"}>
+          {game.status !== "MVP"
+            ? "This game has placeholder metadata only. Pick one of the MVP games for live play."
+            : isHost
+              ? "Start Game creates the backend round and sends everyone to the live gameplay screen."
+              : "Read the rules while the host starts the game."}
         </StatusNote>
         <h2 className="text-3xl font-black">{game.name}</h2>
         <p className="mt-4 max-w-2xl leading-7 text-white/66">{game.description}</p>
@@ -609,11 +624,16 @@ export function GameIntroPage() {
         <Button
           type="button"
           className="mt-6"
-          disabled={!isHost || isRoomLoading}
+          disabled={!isHost || isRoomLoading || !canStartLiveGame}
           onClick={handleStartGameplay}
         >
           {isRoomLoading ? "Starting" : "Start Game"}
         </Button>
+        {!canStartLiveGame && isHost ? (
+          <Button to="/games" tone="ghost" className="ml-0 mt-3 sm:ml-3">
+            Choose MVP Game
+          </Button>
+        ) : null}
         {!isHost ? (
           <p className="mt-3 text-sm font-bold text-white/48">Only the host can start the game.</p>
         ) : null}

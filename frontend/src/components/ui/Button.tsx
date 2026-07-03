@@ -31,6 +31,15 @@ export function Button({
   const classes = `inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border px-5 py-3 text-sm font-black uppercase tracking-[0.14em] transition disabled:cursor-not-allowed disabled:opacity-45 ${tones[tone]} ${className}`;
 
   if (to) {
+    if (props.disabled) {
+      return (
+        <span aria-disabled="true" className={`${classes} cursor-not-allowed opacity-45`}>
+          {Icon ? <Icon size={18} aria-hidden="true" /> : null}
+          <span>{children}</span>
+        </span>
+      );
+    }
+
     return (
       <Link to={to} className={classes}>
         {Icon ? <Icon size={18} aria-hidden="true" /> : null}
