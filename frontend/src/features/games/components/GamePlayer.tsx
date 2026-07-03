@@ -34,7 +34,7 @@ export function GamePlayer({ game }: { game: GameDefinition }) {
     return (
       <Panel>
         <p className="text-xs font-black uppercase tracking-[0.24em] text-flare">
-          Placeholder Gameplay
+          Future Game Preview
         </p>
         <h2 className="mt-3 text-3xl font-black">{game.name}</h2>
         <p className="mt-3 leading-7 text-white/64">{game.sampleData[0].helperText}</p>
@@ -47,7 +47,7 @@ export function GamePlayer({ game }: { game: GameDefinition }) {
       <p className="text-xs font-black uppercase tracking-[0.26em] text-surge">
         {label}
       </p>
-      <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-black leading-tight sm:text-6xl">
+      <h2 className="mx-auto mt-5 max-w-3xl text-3xl font-black leading-tight sm:text-6xl">
         {currentCard.prompt}
       </h2>
       <p className="mx-auto mt-4 max-w-xl leading-7 text-white/62">
@@ -70,14 +70,14 @@ export function GamePlayer({ game }: { game: GameDefinition }) {
           </div>
         ))}
       </div>
-      <div className="mt-7 flex flex-wrap justify-center gap-3">
-        <Button icon={Check} tone="green" type="button" onClick={() => nextCard("correct")}>
+      <div className="mt-7 grid gap-3 sm:grid-cols-3">
+        <Button icon={Check} tone="green" type="button" className="w-full" onClick={() => nextCard("correct")}>
           Correct
         </Button>
-        <Button icon={SkipForward} tone="orange" type="button" onClick={() => nextCard("skip")}>
+        <Button icon={SkipForward} tone="orange" type="button" className="w-full" onClick={() => nextCard("skip")}>
           Skip
         </Button>
-        <Button icon={RotateCcw} tone="ghost" type="button" onClick={reset}>
+        <Button icon={RotateCcw} tone="ghost" type="button" className="w-full" onClick={reset}>
           Reset
         </Button>
       </div>

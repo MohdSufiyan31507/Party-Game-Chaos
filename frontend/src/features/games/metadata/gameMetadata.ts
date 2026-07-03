@@ -43,7 +43,7 @@ function createGame(
     rules:
       status === "MVP"
         ? ["Use the on-screen prompt.", "Host taps Correct or Skip.", "Score as many as possible."]
-        : ["Placeholder metadata is ready.", "Advanced gameplay can plug in later."],
+        : ["Game plan is ready.", "Full live mode can plug in later."],
     tutorial:
       status === "MVP"
         ? ["Pick the game.", "Start the live room round.", "Use Correct/Skip to cycle prompts."]
@@ -59,7 +59,7 @@ function createGame(
         {
           prompt: `${name} sample prompt`,
           answer: `${name} sample answer`,
-          helperText: "Placeholder gameplay screen for future implementation.",
+          helperText: "Future game preview. The live version can be added without changing the game library.",
         },
       ],
   };
@@ -73,7 +73,7 @@ export const gameMetadata: GameDefinition[] = [
   createGame("guess-song", "Guess the Song", "Text clues and hummable chaos without copyrighted audio.", "Medium", "Placeholder"),
   createGame("guess-animal", "Guess the Animal", "Clues, impressions, and questionable biology confidence.", "Chill", "Placeholder"),
   createGame("guess-celebrity", "Guess the Celebrity", "Guess the famous-ish person from fake-safe clues.", "Medium", "Placeholder"),
-  createGame("guess-logo", "Guess the Logo", "Placeholder logo clues without real brand artwork.", "Chill", "Placeholder"),
+  createGame("guess-logo", "Guess the Logo", "Text logo clues without real brand artwork.", "Chill", "Placeholder"),
   createGame("guess-brand", "Guess the Brand", "Brand-style riddles using text-only sample clues.", "Medium", "Placeholder"),
   createGame("guess-flag", "Guess the Flag", "Flag facts and color clues for quick guesses.", "Chill", "Placeholder"),
   createGame("guess-country", "Guess the Country", "Culture, map, and food clues without getting too serious.", "Medium", "Placeholder"),

@@ -520,6 +520,11 @@ export function GameSelectionPage() {
   const { activeRoom, isRoomLoading, selectGame } = useRoom();
   const [error, setError] = useState("");
   const isHost = Boolean(activeRoom && user && activeRoom.host === user._id);
+  const selectedGame = activeRoom?.selectedGameId ? getGameById(activeRoom.selectedGameId) : null;
+  const gameCards = [...gameRegistry].sort((first, second) => {
+    if (first.status === second.status) return first.name.localeCompare(second.name);
+    return first.status === "MVP" ? -1 : 1;
+  });
 
   if (isRoomLoading && !activeRoom) {
     return (
@@ -534,6 +539,12 @@ export function GameSelectionPage() {
   async function handleSelectGame(gameId: string) {
     if (!activeRoom) {
       setError("Create or join a room before selecting a game");
+      return;
+    }
+
+    const game = getGameById(gameId);
+    if (game?.status !== "MVP") {
+      setError("That game is in the library for later. Pick a Play Live game for this room.");
       return;
     }
 
@@ -553,12 +564,12 @@ export function GameSelectionPage() {
       eyebrow={activeRoom ? `Room ${activeRoom.code}` : "Game Registry"}
       subtitle={
         activeRoom?.selectedGameId
-          ? `Selected: ${getGameById(activeRoom.selectedGameId)?.name ?? activeRoom.selectedGameId}`
+          ? `Selected: ${selectedGame?.name ?? activeRoom.selectedGameId}`
           : undefined
       }
     >
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {gameRegistry.map((game) => (
+        {gameCards.map((game) => (
           <Panel
             key={game.id}
             className={`${game.status === "MVP" ? "border-surge/40" : "opacity-70"} ${
@@ -567,8 +578,14 @@ export function GameSelectionPage() {
           >
             <div className="flex items-start justify-between gap-3">
               <h2 className="text-2xl font-black">{game.name}</h2>
-              <span className="rounded-md bg-white/8 px-2 py-1 text-xs font-black">
-                {game.status}
+              <span
+                className={`rounded-md px-2 py-1 text-xs font-black ${
+                  game.status === "MVP"
+                    ? "border border-lime/25 bg-lime/10 text-lime"
+                    : "bg-white/8 text-white/46"
+                }`}
+              >
+                {game.status === "MVP" ? "Play Live" : "Coming Later"}
               </span>
             </div>
             <p className="mt-3 text-sm leading-6 text-white/62">{game.description}</p>
@@ -579,10 +596,14 @@ export function GameSelectionPage() {
               type="button"
               tone={activeRoom?.selectedGameId === game.id ? "orange" : "ghost"}
               className="mt-5 w-full"
-              disabled={!isHost || isRoomLoading}
+              disabled={!isHost || isRoomLoading || game.status !== "MVP"}
               onClick={() => handleSelectGame(game.id)}
             >
-              {activeRoom?.selectedGameId === game.id ? "Selected" : "Select"}
+              {game.status !== "MVP"
+                ? "Coming Later"
+                : activeRoom?.selectedGameId === game.id
+                  ? "Selected"
+                  : "Select"}
             </Button>
           </Panel>
         ))}
@@ -590,7 +611,7 @@ export function GameSelectionPage() {
       <div className="mt-5">
         <StatusNote tone={isHost ? "success" : "info"}>
           {isHost
-            ? "Pick one game for this room. Everyone else will see the selection live."
+            ? "Pick a Play Live game for this room. Future games stay in the library for later expansion."
             : "Only the host can choose the game. Your screen will update when they pick."}
         </StatusNote>
       </div>
@@ -598,7 +619,7 @@ export function GameSelectionPage() {
       {!isHost ? (
         <p className="mt-4 text-sm font-bold text-white/48">Only the host can choose the game.</p>
       ) : null}
-      <Button to="/categories" className="mt-5" disabled={!activeRoom?.selectedGameId}>
+      <Button to="/categories" className="mt-5" disabled={!selectedGame || selectedGame.status !== "MVP"}>
         Continue
       </Button>
     </PageScaffold>
@@ -710,7 +731,7 @@ export function GameIntroPage() {
     }
 
     if (game.status !== "MVP") {
-      setError("This game is a placeholder. Choose an MVP game to play live.");
+      setError("This future game is not live yet. Choose a Play Live game.");
       return;
     }
 
@@ -738,7 +759,7 @@ export function GameIntroPage() {
       <Panel>
         <StatusNote tone={game.status === "MVP" ? (isHost ? "success" : "info") : "warn"}>
           {game.status !== "MVP"
-            ? "This game has placeholder metadata only. Pick one of the MVP games for live play."
+            ? "This future game is in the library, but the live version is not turned on yet."
             : isHost
               ? "Start Game creates the backend round and sends everyone to the live gameplay screen."
               : "Read the rules while the host starts the game."}
@@ -763,7 +784,7 @@ export function GameIntroPage() {
         </Button>
         {!canStartLiveGame && isHost ? (
           <Button to="/games" tone="ghost" className="ml-0 mt-3 sm:ml-3">
-            Choose MVP Game
+            Choose Play Live Game
           </Button>
         ) : null}
         {!isHost ? (
@@ -989,7 +1010,7 @@ export function GameplayPage() {
   }
 
   return (
-    <PageScaffold title="Playable MVP Demos" eyebrow="Local Fallback Engine">
+    <PageScaffold title="Playable Game Demos" eyebrow="Practice Mode">
       {error ? <p className="mb-4 text-sm font-bold text-punch">{error}</p> : null}
       <div className="space-y-5">
         {getPlayableGames().map((game) => (
