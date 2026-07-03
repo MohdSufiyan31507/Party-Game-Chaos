@@ -151,6 +151,40 @@ test("guest user can complete the core room and gameplay API path", async () => 
   }
 });
 
+test("account signup can login with the same credentials", async () => {
+  const { request, server } = await bootApi();
+  let userId;
+
+  try {
+    const email = `account-${Date.now()}@chaos.test`;
+    const password = "Password123";
+    const signup = await request("/auth/signup", {
+      method: "POST",
+      body: JSON.stringify({
+        username: "AccountSmoke",
+        email,
+        password,
+      }),
+    }).then((response) => response.json());
+    userId = signup.user._id;
+
+    assert.equal(signup.user.email, email);
+    assert.equal(signup.user.isGuest, false);
+    assert.ok(signup.token);
+
+    const login = await request("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    }).then((response) => response.json());
+
+    assert.equal(login.user._id, signup.user._id);
+    assert.ok(login.token);
+  } finally {
+    if (userId) await UserModel.deleteOne({ _id: userId });
+    await shutdown(server);
+  }
+});
+
 test("store purchase spends coins and records ownership", async () => {
   const { request, server } = await bootApi();
   let userId;

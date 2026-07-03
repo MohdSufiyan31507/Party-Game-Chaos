@@ -16,7 +16,8 @@ export function LandingPage() {
             Party games with score drama and neon nonsense.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-white/68">
-            A local Milestone 1 frontend. Auth, backend, rooms, and realtime arrive later.
+            Live multiplayer rooms, guest runs, account login, team-vs-team scoring,
+            and realtime party game chaos.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Button to="/guest" icon={Play} tone="cyan">Quick Guest</Button>

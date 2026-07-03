@@ -1,6 +1,6 @@
 import { LogIn, PartyPopper, UserPlus } from "lucide-react";
 import { FormEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthLayout } from "../components/layout/AuthLayout";
 import { Button } from "../components/ui/Button";
 import { Field } from "../components/ui/Field";
@@ -8,7 +8,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 function formValue(form: HTMLFormElement, name: string) {
   const value = new FormData(form).get(name);
-  return typeof value === "string" ? value : "";
+  return typeof value === "string" ? value.trim() : "";
 }
 
 export function LoginPage() {
@@ -44,6 +44,17 @@ export function LoginPage() {
         <Button icon={LogIn} tone="cyan" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? "Logging In" : "Login"}
         </Button>
+        <p className="text-center text-sm font-bold text-white/56">
+          New here?{" "}
+          <Link className="text-surge hover:text-white" to="/signup">
+            Create an account
+          </Link>{" "}
+          or{" "}
+          <Link className="text-flare hover:text-white" to="/guest">
+            continue as guest
+          </Link>
+          .
+        </p>
       </form>
     </AuthLayout>
   );
@@ -84,6 +95,17 @@ export function SignupPage() {
         <Button icon={UserPlus} tone="pink" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? "Creating" : "Create Account"}
         </Button>
+        <p className="text-center text-sm font-bold text-white/56">
+          Already have an account?{" "}
+          <Link className="text-surge hover:text-white" to="/login">
+            Login
+          </Link>{" "}
+          or{" "}
+          <Link className="text-flare hover:text-white" to="/guest">
+            play as guest
+          </Link>
+          .
+        </p>
       </form>
     </AuthLayout>
   );
@@ -118,6 +140,17 @@ export function GuestLoginPage() {
         <Button icon={PartyPopper} tone="orange" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? "Starting" : "Start Guest Run"}
         </Button>
+        <p className="text-center text-sm font-bold text-white/56">
+          Want progress saved properly?{" "}
+          <Link className="text-surge hover:text-white" to="/signup">
+            Signup
+          </Link>{" "}
+          or{" "}
+          <Link className="text-punch hover:text-white" to="/login">
+            login
+          </Link>
+          .
+        </p>
       </form>
     </AuthLayout>
   );
