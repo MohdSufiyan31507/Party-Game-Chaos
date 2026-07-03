@@ -175,6 +175,9 @@ export function LocalTeamSetupPage() {
       subtitle="The person creating this setup is the host. Add team names and members, then pass the device around."
     >
       <Panel>
+        <StatusNote tone="info">
+          One device mode creates a private room for the host only. Add the real player names here, then choose a game and pass the phone around.
+        </StatusNote>
         <form className="grid gap-5 lg:grid-cols-2" onSubmit={handleSubmit}>
           <div className="lg:col-span-2">
             <Field label="Room Name" name="roomName" placeholder="Friday Adda" />
@@ -205,8 +208,8 @@ export function LocalTeamSetupPage() {
               className="w-full rounded-lg border border-white/12 bg-white/8 px-4 py-3 text-white outline-none placeholder:text-white/30 focus:border-surge/70 focus:ring-4 focus:ring-surge/10"
             />
           </label>
-          <p className="text-sm font-bold text-white/54 lg:col-span-2">
-            Put each member on a new line, or separate names with commas. Everyone can play from this one device.
+          <p className="text-sm font-bold leading-6 text-white/54 lg:col-span-2">
+            Put each member on a new line, or separate names with commas. These names are for the scoreboard and team identity; only the host account is needed.
           </p>
           {error ? <p className="text-sm font-bold text-punch lg:col-span-2">{error}</p> : null}
           <Button
@@ -800,6 +803,11 @@ export function GameplayPage() {
   const promptIndex = room?.gameplay?.currentPromptIndex ?? 0;
   const currentCard = game?.sampleData[promptIndex % game.sampleData.length];
   const activeTeam = room?.teams.find((team) => team.id === room.gameplay?.activeTeamId);
+  const activeTeamMembers = activeTeam?.memberNames?.length
+    ? activeTeam.memberNames
+    : activeTeam?.playerIds
+        .map((playerId) => room?.players.find((player) => player.user === playerId)?.username)
+        .filter((name): name is string => Boolean(name)) ?? [];
   const isHost = Boolean(room && user && room.host === user._id);
 
   useEffect(() => {
@@ -886,10 +894,22 @@ export function GameplayPage() {
               ? "You control scoring. Correct/Skip advances the shared card for everyone."
               : "Watch the card and help your team. The host controls scoring."}
           </StatusNote>
+          {activeTeamMembers.length ? (
+            <div className="mb-5 flex flex-wrap justify-center gap-2">
+              {activeTeamMembers.map((memberName) => (
+                <span
+                  key={memberName}
+                  className="rounded-md border border-white/10 bg-white/8 px-3 py-2 text-xs font-black uppercase tracking-[0.12em] text-white/70"
+                >
+                  {memberName}
+                </span>
+              ))}
+            </div>
+          ) : null}
           <p className="text-xs font-black uppercase tracking-[0.26em] text-surge">
             Current Card
           </p>
-          <h2 className="mx-auto mt-5 max-w-3xl text-4xl font-black leading-tight sm:text-6xl">
+          <h2 className="mx-auto mt-5 max-w-3xl text-3xl font-black leading-tight sm:text-6xl">
             {currentCard.prompt}
           </h2>
           <p className="mx-auto mt-4 max-w-xl leading-7 text-white/62">
@@ -898,7 +918,7 @@ export function GameplayPage() {
           <p className="mt-4 inline-flex rounded-md border border-lime/25 bg-lime/10 px-3 py-2 text-sm font-black text-lime">
             Answer: {currentCard.answer}
           </p>
-          <p className="mt-4 text-5xl font-black text-flare">
+          <p className="mt-4 text-5xl font-black text-flare sm:text-6xl">
             {remainingSeconds === 0 ? "Time is up!" : `${remainingSeconds ?? room.gameplay.roundDurationSeconds}s`}
           </p>
 
@@ -920,11 +940,12 @@ export function GameplayPage() {
 
           {error ? <p className="mt-4 text-sm font-bold text-punch">{error}</p> : null}
 
-          <div className="mt-7 flex flex-wrap justify-center gap-3">
+          <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <Button
               icon={Check}
               tone="green"
               type="button"
+              className="w-full"
               disabled={!isHost || isRoomLoading}
               onClick={() => handleAction("correct")}
             >
@@ -934,6 +955,7 @@ export function GameplayPage() {
               icon={SkipForward}
               tone="orange"
               type="button"
+              className="w-full"
               disabled={!isHost || isRoomLoading}
               onClick={() => handleAction("skip")}
             >
@@ -942,6 +964,7 @@ export function GameplayPage() {
             <Button
               tone="purple"
               type="button"
+              className="w-full"
               disabled={!isHost || isRoomLoading}
               onClick={handleSwitchTeam}
             >
@@ -950,6 +973,7 @@ export function GameplayPage() {
             <Button
               tone="ghost"
               type="button"
+              className="w-full"
               disabled={!isHost || isRoomLoading}
               onClick={handleEndRound}
             >

@@ -16,14 +16,14 @@ export function PageScaffold({
 }) {
   return (
     <PageTransition className="space-y-6">
-      <section className="py-4">
+      <section className="py-2 sm:py-4">
         <p className="text-xs font-black uppercase tracking-[0.28em] text-surge">
           {eyebrow}
         </p>
-        <h1 className="mt-3 text-4xl font-black leading-tight sm:text-6xl">
+        <h1 className="mt-3 text-4xl font-black leading-none sm:text-6xl">
           {title}
         </h1>
-        <p className="mt-4 max-w-2xl text-lg leading-8 text-white/64">
+        <p className="mt-4 max-w-2xl text-base leading-7 text-white/64 sm:text-lg sm:leading-8">
           {subtitle ?? narratorFor(title)}
         </p>
       </section>

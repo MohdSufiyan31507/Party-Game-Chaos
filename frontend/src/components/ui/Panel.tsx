@@ -8,7 +8,7 @@ export function Panel({
   className?: string;
 }) {
   return (
-    <section className={`chaos-surface rounded-lg p-5 shadow-glow ${className}`}>
+    <section className={`chaos-surface rounded-lg p-4 shadow-glow sm:p-5 ${className}`}>
       {children}
     </section>
   );
