@@ -9,6 +9,7 @@ import {
 } from "react";
 import {
   createRoomRequest,
+  changeGameRequest,
   endRoundRequest,
   fetchRoomRequest,
   finishGameRequest,
@@ -60,6 +61,7 @@ type RoomContextValue = {
   endRound: (code: string, reason: "manual" | "time-up") => Promise<Room>;
   nextRound: (code: string) => Promise<Room>;
   finishGame: (code: string) => Promise<Room>;
+  changeGame: (code: string) => Promise<Room>;
   resetRoom: (code: string) => Promise<Room>;
   clearRoom: () => void;
 };
@@ -342,6 +344,20 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     [requireToken],
   );
 
+  const changeGame = useCallback(
+    async (code: string) => {
+      setIsRoomLoading(true);
+      try {
+        const response = await changeGameRequest(requireToken(), code);
+        rememberRoom(response.room);
+        return response.room;
+      } finally {
+        setIsRoomLoading(false);
+      }
+    },
+    [rememberRoom, requireToken],
+  );
+
   const value = useMemo<RoomContextValue>(
     () => ({
       activeRoom,
@@ -363,6 +379,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
       endRound,
       nextRound,
       finishGame,
+      changeGame,
       resetRoom,
       clearRoom: () => {
         forgetRoom();
@@ -370,6 +387,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     }),
     [
       activeRoom,
+      changeGame,
       createRoom,
       endRound,
       finishGame,

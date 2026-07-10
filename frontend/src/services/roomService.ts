@@ -142,6 +142,13 @@ export function finishGameRequest(token: string, code: string) {
   });
 }
 
+export function changeGameRequest(token: string, code: string) {
+  return apiRequest<{ room: Room }>(`/rooms/${code}/gameplay/change-game`, {
+    method: "POST",
+    token,
+  });
+}
+
 export function resetRoomRequest(token: string, code: string) {
   return apiRequest<{ room: Room }>(`/rooms/${code}/reset`, {
     method: "POST",

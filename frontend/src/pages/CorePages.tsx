@@ -7,6 +7,7 @@ import {
   Copy,
   Home,
   LogOut,
+  Gamepad2,
   PlusCircle,
   Shuffle,
   SkipForward,
@@ -1206,7 +1207,7 @@ export function FinalWinnerPage() {
   const navigate = useNavigate();
   const { code } = useParams();
   const { user } = useAuth();
-  const { activeRoom, isRoomLoading, loadRoom, resetRoom } = useRoom();
+  const { activeRoom, changeGame, isRoomLoading, loadRoom, resetRoom } = useRoom();
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -1236,6 +1237,18 @@ export function FinalWinnerPage() {
       navigate(`/lobby/${room.code}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not reset room");
+    }
+  }
+
+  async function handleChangeGame() {
+    if (!room) return;
+    setError("");
+
+    try {
+      await changeGame(room.code);
+      navigate("/games");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not change game");
     }
   }
 
@@ -1269,6 +1282,15 @@ export function FinalWinnerPage() {
         <div className="mt-7 flex flex-wrap justify-center gap-3">
           <Button to="/home" icon={Home}>
             Back Home
+          </Button>
+          <Button
+            type="button"
+            icon={Gamepad2}
+            tone="orange"
+            disabled={!isHost || isRoomLoading || !room}
+            onClick={handleChangeGame}
+          >
+            Change Game
           </Button>
           <Button
             type="button"

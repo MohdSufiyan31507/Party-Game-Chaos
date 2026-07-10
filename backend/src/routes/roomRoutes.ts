@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  changeGame,
   createRoom,
   endRound,
   finishGame,
@@ -40,4 +41,5 @@ roomRoutes.post("/:code/gameplay/switch-team", asyncHandler(switchGameplayTeam))
 roomRoutes.post("/:code/gameplay/end-round", asyncHandler(endRound));
 roomRoutes.post("/:code/gameplay/next-round", asyncHandler(nextRound));
 roomRoutes.post("/:code/gameplay/finish", asyncHandler(finishGame));
+roomRoutes.post("/:code/gameplay/change-game", asyncHandler(changeGame));
 roomRoutes.post("/:code/reset", asyncHandler(resetRoom));

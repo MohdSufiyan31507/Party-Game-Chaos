@@ -406,6 +406,7 @@ export async function selectGame(req: Request, res: Response) {
   }
 
   room.selectedGameId = gameId;
+  room.selectedCategory = undefined;
   room.status = "game-selection";
   await room.save();
   emitRoomUpdated(room.code);
@@ -459,6 +460,8 @@ export async function startGameplay(req: Request, res: Response) {
     throw new HttpError(400, "This game is not playable yet");
   }
 
+  const previousScores = room.gameplay?.scores ?? room.finalResult?.scores ?? { red: 0, blue: 0 };
+
   room.gameplay = {
     isActive: true,
     phase: "playing",
@@ -467,7 +470,7 @@ export async function startGameplay(req: Request, res: Response) {
     round: 1,
     roundDurationSeconds: DEFAULT_ROUND_DURATION_SECONDS,
     roundEndsAt: roundEndsAt(),
-    scores: { red: 0, blue: 0 },
+    scores: previousScores,
     correct: { red: 0, blue: 0 },
     skips: { red: 0, blue: 0 },
     startedAt: new Date(),
@@ -637,6 +640,38 @@ export async function finishGame(req: Request, res: Response) {
   };
 
   await updatePlayerStats(room, winnerTeamId);
+  await room.save();
+  emitRoomUpdated(room.code);
+
+  res.json({ room: serializeRoom(room) });
+}
+
+export async function changeGame(req: Request, res: Response) {
+  const user = requireCurrentUser(req);
+  const code = roomCodeParam(req);
+  const room = await RoomModel.findOne({ code });
+
+  if (!room) {
+    throw new HttpError(404, "Room not found");
+  }
+
+  requireHost(room, user._id.toString());
+
+  if (!room.teamsLocked) {
+    throw new HttpError(400, "Lock teams before changing games");
+  }
+
+  if (room.gameplay) {
+    room.gameplay.isActive = false;
+    room.gameplay.phase = "round-result";
+    room.gameplay.roundEndsAt = undefined;
+    room.gameplay.updatedAt = new Date();
+  }
+
+  room.status = "game-selection";
+  room.selectedGameId = undefined;
+  room.selectedCategory = undefined;
+  room.finalResult = undefined;
   await room.save();
   emitRoomUpdated(room.code);
 
