@@ -4,13 +4,18 @@ import {
   ArrowRight,
   Check,
   CheckCircle2,
+  Circle,
   Copy,
+  Crown,
   Home,
   LogOut,
   Gamepad2,
+  ListChecks,
   PlusCircle,
   Shuffle,
+  Sparkles,
   SkipForward,
+  Timer,
   UsersRound,
   Trophy,
 } from "lucide-react";
@@ -30,6 +35,56 @@ import { PageScaffold } from "./PageScaffold";
 function formValue(form: HTMLFormElement, name: string) {
   const value = new FormData(form).get(name);
   return typeof value === "string" ? value.trim() : "";
+}
+
+const flowSteps = ["Teams", "Game", "Category", "Play", "Scores"];
+
+function RoomFlowRail({ current }: { current: string }) {
+  return (
+    <div className="mb-5 grid gap-2 sm:grid-cols-5">
+      {flowSteps.map((step, index) => {
+        const isCurrent = step === current;
+        const isPast = flowSteps.indexOf(current) > index;
+
+        return (
+          <div
+            key={step}
+            className={`rounded-lg border px-3 py-2 text-center text-xs font-black uppercase tracking-[0.14em] ${
+              isCurrent
+                ? "border-flare/60 bg-flare/15 text-flare"
+                : isPast
+                  ? "border-lime/35 bg-lime/10 text-lime"
+                  : "border-white/10 bg-white/5 text-white/40"
+            }`}
+          >
+            {step}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function teamTone(teamId: string) {
+  return teamId === "red"
+    ? {
+        border: "border-punch/45",
+        text: "text-punch",
+        bg: "bg-punch/10",
+      }
+    : {
+        border: "border-surge/45",
+        text: "text-surge",
+        bg: "bg-surge/10",
+      };
+}
+
+function gameKindLabel(kind: string) {
+  if (kind === "acting") return "Acting";
+  if (kind === "heads_up") return "Heads Up";
+  if (kind === "rapid_fire") return "Fast";
+  if (kind === "emoji") return "Emoji";
+  return "Guessing";
 }
 
 export function HomeDashboardPage() {
@@ -456,9 +511,10 @@ export function TeamSetupPage() {
       eyebrow={`Room ${room.code}`}
       subtitle={room.teamsLocked ? "Teams are locked. The drama is official." : undefined}
     >
+      <RoomFlowRail current="Teams" />
       <div className="grid gap-5 md:grid-cols-2">
         {teams.map((team) => (
-          <Panel key={team.id}>
+          <Panel key={team.id} className={team.accent === "red" ? "border-punch/35" : "border-surge/35"}>
             <h2 className={`text-3xl font-black ${team.accent === "red" ? "text-punch" : "text-surge"}`}>
               {team.name}
             </h2>
@@ -569,18 +625,40 @@ export function GameSelectionPage() {
           : undefined
       }
     >
+      <RoomFlowRail current="Game" />
+      <div className="mb-5 grid gap-3 sm:grid-cols-3">
+        <div className="rounded-lg border border-lime/25 bg-lime/10 p-4">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-lime">Playable</p>
+          <p className="mt-1 text-3xl font-black">{gameCards.filter((game) => game.status === "MVP").length}</p>
+        </div>
+        <div className="rounded-lg border border-white/10 bg-white/6 p-4">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-white/44">Library</p>
+          <p className="mt-1 text-3xl font-black">{gameCards.length}</p>
+        </div>
+        <div className="rounded-lg border border-flare/25 bg-flare/10 p-4">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-flare">Selected</p>
+          <p className="mt-1 truncate text-2xl font-black">{selectedGame?.name ?? "None yet"}</p>
+        </div>
+      </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {gameCards.map((game) => (
           <Panel
             key={game.id}
-            className={`${game.status === "MVP" ? "border-surge/40" : "opacity-70"} ${
-              activeRoom?.selectedGameId === game.id ? "border-flare/60" : ""
+            className={`flex min-h-[270px] flex-col ${
+              game.status === "MVP" ? "border-surge/40" : "opacity-70"
+            } ${
+              activeRoom?.selectedGameId === game.id ? "border-flare/70 bg-flare/10" : ""
             }`}
           >
             <div className="flex items-start justify-between gap-3">
-              <h2 className="text-2xl font-black">{game.name}</h2>
+              <div>
+                <p className="mb-2 inline-flex rounded-md border border-white/10 bg-white/8 px-2 py-1 text-xs font-black uppercase tracking-[0.14em] text-white/48">
+                  {gameKindLabel(game.kind)}
+                </p>
+                <h2 className="text-2xl font-black">{game.name}</h2>
+              </div>
               <span
-                className={`rounded-md px-2 py-1 text-xs font-black ${
+                className={`shrink-0 rounded-md px-2 py-1 text-xs font-black ${
                   game.status === "MVP"
                     ? "border border-lime/25 bg-lime/10 text-lime"
                     : "bg-white/8 text-white/46"
@@ -590,13 +668,18 @@ export function GameSelectionPage() {
               </span>
             </div>
             <p className="mt-3 text-sm leading-6 text-white/62">{game.description}</p>
-            <p className="mt-4 text-xs font-black uppercase tracking-[0.2em] text-flare">
-              {game.difficulty}
-            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className="rounded-md border border-flare/25 bg-flare/10 px-2 py-1 text-xs font-black uppercase tracking-[0.12em] text-flare">
+                {game.difficulty}
+              </span>
+              <span className="rounded-md border border-white/10 bg-white/6 px-2 py-1 text-xs font-black uppercase tracking-[0.12em] text-white/48">
+                {game.categories.length} Categories
+              </span>
+            </div>
             <Button
               type="button"
               tone={activeRoom?.selectedGameId === game.id ? "orange" : "ghost"}
-              className="mt-5 w-full"
+              className="mt-auto w-full"
               disabled={!isHost || isRoomLoading || game.status !== "MVP"}
               onClick={() => handleSelectGame(game.id)}
             >
@@ -668,19 +751,27 @@ export function CategorySelectionPage() {
       eyebrow={selectedGame?.name ?? "Categories"}
       subtitle={activeRoom?.selectedCategory ? `Selected: ${activeRoom.selectedCategory}` : undefined}
     >
+      <RoomFlowRail current="Category" />
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((category, index) => (
           <Panel
             key={category}
             className={
               activeRoom?.selectedCategory === category
-                ? "border-flare/60"
+                ? "border-flare/70 bg-flare/10"
                 : index < 3
                   ? "border-surge/35"
                   : ""
             }
           >
-            <p className="text-lg font-black">{category}</p>
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-lg font-black">{category}</p>
+              {activeRoom?.selectedCategory === category ? (
+                <CheckCircle2 className="text-flare" size={22} />
+              ) : (
+                <Circle className="text-white/24" size={18} />
+              )}
+            </div>
             <Button
               type="button"
               tone={activeRoom?.selectedCategory === category ? "orange" : "ghost"}
@@ -757,6 +848,7 @@ export function GameIntroPage() {
       eyebrow={activeRoom?.selectedCategory ?? "Rules Briefing"}
       subtitle={activeRoom ? `Room ${activeRoom.code}` : undefined}
     >
+      <RoomFlowRail current="Play" />
       <Panel>
         <StatusNote tone={game.status === "MVP" ? (isHost ? "success" : "info") : "warn"}>
           {game.status !== "MVP"
@@ -765,11 +857,22 @@ export function GameIntroPage() {
               ? "Start Game creates the backend round and sends everyone to the live gameplay screen."
               : "Read the rules while the host starts the game."}
         </StatusNote>
-        <h2 className="text-3xl font-black">{game.name}</h2>
+        <div className="mt-5 flex flex-wrap items-center gap-2">
+          <span className="rounded-md border border-surge/25 bg-surge/10 px-2 py-1 text-xs font-black uppercase tracking-[0.14em] text-surge">
+            {gameKindLabel(game.kind)}
+          </span>
+          <span className="rounded-md border border-flare/25 bg-flare/10 px-2 py-1 text-xs font-black uppercase tracking-[0.14em] text-flare">
+            {game.difficulty}
+          </span>
+        </div>
+        <h2 className="mt-3 text-3xl font-black">{game.name}</h2>
         <p className="mt-4 max-w-2xl leading-7 text-white/66">{game.description}</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          {game.rules.map((rule) => (
-            <div key={rule} className="rounded-lg border border-white/10 p-4 font-black">
+          {game.rules.map((rule, index) => (
+            <div key={rule} className="rounded-lg border border-white/10 bg-white/6 p-4 font-black">
+              <span className="mb-3 grid size-8 place-items-center rounded-lg border border-lime/25 bg-lime/10 text-sm text-lime">
+                {index + 1}
+              </span>
               {rule}
             </div>
           ))}
@@ -831,6 +934,14 @@ export function GameplayPage() {
         .map((playerId) => room?.players.find((player) => player.user === playerId)?.username)
         .filter((name): name is string => Boolean(name)) ?? [];
   const isHost = Boolean(room && user && room.host === user._id);
+  const liveTeams =
+    room?.teams.map((team) => ({
+      ...team,
+      score: room.gameplay?.scores[team.id] ?? 0,
+      correct: room.gameplay?.correct[team.id] ?? 0,
+      isActive: team.id === room.gameplay?.activeTeamId,
+      tone: teamTone(team.id),
+    })) ?? [];
 
   useEffect(() => {
     if (!room?.gameplay?.roundEndsAt || room.gameplay.phase !== "playing") {
@@ -910,12 +1021,36 @@ export function GameplayPage() {
         eyebrow={activeTeam?.name ?? "Active Team"}
         subtitle={`Room ${room.code} | Round ${room.gameplay.round} | ${room.selectedCategory ?? "Mixed"}`}
       >
-      <Panel className="text-center">
+        <RoomFlowRail current="Play" />
+        <Panel className="text-center">
           <StatusNote tone={isHost ? "success" : "info"}>
             {isHost
               ? "You control scoring. Correct/Skip advances the shared card for everyone."
               : "Watch the card and help your team. The host controls scoring."}
           </StatusNote>
+          <div className="mb-6 grid gap-3 sm:grid-cols-2">
+            {liveTeams.map((team) => (
+              <div
+                key={team.id}
+                className={`rounded-lg border p-4 text-left ${team.tone.border} ${
+                  team.isActive ? `${team.tone.bg} shadow-glow` : "bg-white/6"
+                }`}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className={`text-xs font-black uppercase tracking-[0.18em] ${team.tone.text}`}>
+                      {team.isActive ? "On Turn" : "Waiting"}
+                    </p>
+                    <h2 className="mt-1 text-2xl font-black">{team.name}</h2>
+                  </div>
+                  <p className="text-5xl font-black">{team.score}</p>
+                </div>
+                <p className="mt-3 text-sm font-bold text-white/54">
+                  {team.correct} correct this game
+                </p>
+              </div>
+            ))}
+          </div>
           {activeTeamMembers.length ? (
             <div className="mb-5 flex flex-wrap justify-center gap-2">
               {activeTeamMembers.map((memberName) => (
@@ -931,27 +1066,32 @@ export function GameplayPage() {
           <p className="text-xs font-black uppercase tracking-[0.26em] text-surge">
             Current Card
           </p>
-          <h2 className="mx-auto mt-5 max-w-3xl text-3xl font-black leading-tight sm:text-6xl">
-            {currentCard.prompt}
-          </h2>
+          <div className="mx-auto mt-5 max-w-4xl rounded-lg border border-white/10 bg-white/8 p-5 sm:p-7">
+            <h2 className="text-3xl font-black leading-tight sm:text-6xl">
+              {currentCard.prompt}
+            </h2>
+          </div>
           <p className="mx-auto mt-4 max-w-xl leading-7 text-white/62">
             {currentCard.helperText}
           </p>
           <p className="mt-4 inline-flex rounded-md border border-lime/25 bg-lime/10 px-3 py-2 text-sm font-black text-lime">
             Answer: {currentCard.answer}
           </p>
-          <p className="mt-4 text-5xl font-black text-flare sm:text-6xl">
-            {remainingSeconds === 0 ? "Time is up!" : `${remainingSeconds ?? room.gameplay.roundDurationSeconds}s`}
-          </p>
+          <div className="mx-auto mt-5 inline-flex items-center gap-3 rounded-lg border border-flare/35 bg-flare/10 px-5 py-3 text-flare">
+            <Timer size={24} />
+            <p className="text-5xl font-black sm:text-6xl">
+              {remainingSeconds === 0 ? "Time is up!" : `${remainingSeconds ?? room.gameplay.roundDurationSeconds}s`}
+            </p>
+          </div>
 
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {[
-              ["Red Score", room.gameplay.scores.red],
-              ["Blue Score", room.gameplay.scores.blue],
               ["Red Correct", room.gameplay.correct.red],
               ["Blue Correct", room.gameplay.correct.blue],
+              ["Red Skips", room.gameplay.skips.red],
+              ["Blue Skips", room.gameplay.skips.blue],
             ].map(([label, value]) => (
-              <div key={label} className="rounded-lg border border-white/10 p-4">
+              <div key={label} className="rounded-lg border border-white/10 bg-white/6 p-4">
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-white/42">
                   {label}
                 </p>
@@ -1060,7 +1200,15 @@ export function RoundResultPage() {
       eyebrow={team?.name ?? "Round Result"}
       subtitle={room ? `Room ${room.code}` : undefined}
     >
+      <RoomFlowRail current="Scores" />
       <Panel>
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-flare">Round {result?.round ?? 0}</p>
+            <h2 className="mt-2 text-3xl font-black">{team?.name ?? "Team"} Report</h2>
+          </div>
+          <ListChecks className="text-lime" size={42} />
+        </div>
         <div className="grid gap-4 sm:grid-cols-3">
           {[
             ["Correct", String(result?.correct ?? 0)],
@@ -1071,7 +1219,7 @@ export function RoundResultPage() {
               <p className="text-xs font-black uppercase tracking-[0.2em] text-white/42">
                 {label}
               </p>
-              <p className="mt-2 text-4xl font-black">{value}</p>
+              <p className={`mt-2 text-4xl font-black ${label === "Score" ? "text-flare" : ""}`}>{value}</p>
             </div>
           ))}
         </div>
@@ -1116,10 +1264,14 @@ export function LeaderboardPage() {
     .map((team) => [
       team.name,
       activeRoom?.gameplay?.scores[team.id] ?? 0,
-      team.id === "red" ? "text-punch" : "text-surge",
+      team.id,
+      teamTone(team.id),
     ] as const)
     .sort((first, second) => second[1] - first[1]);
   const isHost = Boolean(activeRoom && user && activeRoom.host === user._id);
+  const topScore = scores[0]?.[1] ?? 0;
+  const trailingScore = scores[1]?.[1] ?? 0;
+  const scoreGap = Math.abs(topScore - trailingScore);
 
   async function handleFinishGame() {
     if (!activeRoom) return;
@@ -1170,20 +1322,45 @@ export function LeaderboardPage() {
 
   return (
     <PageScaffold title="Scoreboard Drama" eyebrow={activeRoom ? `Room ${activeRoom.code}` : "Leaderboard"}>
+      <RoomFlowRail current="Scores" />
       <Panel>
-        <div className="space-y-3">
-          {scores.map(([team, score, color], index) => (
+        <div className="mb-5 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-lg border border-flare/25 bg-flare/10 p-4">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-flare">Leader</p>
+            <p className="mt-1 truncate text-2xl font-black">{scores[0]?.[0] ?? "No leader"}</p>
+          </div>
+          <div className="rounded-lg border border-white/10 bg-white/6 p-4">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-white/44">Score Gap</p>
+            <p className="mt-1 text-3xl font-black">{scoreGap}</p>
+          </div>
+          <div className="rounded-lg border border-lime/25 bg-lime/10 p-4">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-lime">Round</p>
+            <p className="mt-1 text-3xl font-black">{activeRoom?.gameplay?.round ?? 1}</p>
+          </div>
+        </div>
+        <div className="grid gap-3 md:grid-cols-2">
+          {scores.map(([team, score, teamId, tone], index) => (
             <div
               key={team as string}
-              className="flex items-center justify-between rounded-lg border border-white/10 bg-white/6 p-4"
+              className={`rounded-lg border p-5 ${tone.border} ${index === 0 ? `${tone.bg} shadow-glow` : "bg-white/6"}`}
             >
-              <div className="flex items-center gap-4">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className={`text-xs font-black uppercase tracking-[0.18em] ${tone.text}`}>
+                    {index === 0 ? "Leading" : "Chasing"}
+                  </p>
+                  <h2 className="mt-2 text-2xl font-black">{team}</h2>
+                </div>
                 <span className="grid size-10 place-items-center rounded-lg bg-white/10 font-black">
-                  {index + 1}
+                  #{index + 1}
                 </span>
-                <span className={`text-xl font-black ${color}`}>{team}</span>
               </div>
-              <span className="text-2xl font-black">{score}</span>
+              <div className="mt-5 flex items-end justify-between gap-3">
+                <span className={`text-6xl font-black ${tone.text}`}>{score}</span>
+                <span className="text-xs font-black uppercase tracking-[0.18em] text-white/38">
+                  {teamId} Team
+                </span>
+              </div>
             </div>
           ))}
         </div>
@@ -1227,6 +1404,22 @@ export function FinalWinnerPage() {
     ? "No one got cooked. Suspiciously balanced chaos."
     : `${result?.loserTeamName ?? "The other team"} got cooked.`;
   const isHost = Boolean(room && user && room.host === user._id);
+  const finalScores = [
+    {
+      id: "red",
+      label: room?.teams.find((team) => team.id === "red")?.name ?? "Red",
+      score: result?.scores.red ?? 0,
+      isWinner: result?.winnerTeamId === "red",
+      tone: teamTone("red"),
+    },
+    {
+      id: "blue",
+      label: room?.teams.find((team) => team.id === "blue")?.name ?? "Blue",
+      score: result?.scores.blue ?? 0,
+      isWinner: result?.winnerTeamId === "blue",
+      tone: teamTone("blue"),
+    },
+  ];
 
   async function handleResetRoom() {
     if (!room) return;
@@ -1258,28 +1451,45 @@ export function FinalWinnerPage() {
       eyebrow="Final Winner"
       subtitle={loserSubtitle}
     >
-      <Panel className="text-center">
-        <Trophy className="mx-auto text-flare" size={72} />
-        <h2 className="mt-5 text-5xl font-black">
+      <RoomFlowRail current="Scores" />
+      <Panel className="overflow-hidden text-center">
+        <div className="mx-auto grid size-24 place-items-center rounded-lg border border-flare/35 bg-flare/15 shadow-hot">
+          {isDraw ? <Sparkles className="text-flare" size={54} /> : <Crown className="text-flare" size={54} />}
+        </div>
+        <p className="mt-5 text-xs font-black uppercase tracking-[0.26em] text-flare">
+          {isDraw ? "Final Score" : "Winner Locked"}
+        </p>
+        <h2 className="mx-auto mt-3 max-w-3xl text-4xl font-black leading-tight sm:text-6xl">
           {isDraw ? "Draw Game" : `${result?.winnerTeamName ?? "Winner"} Wins`}
         </h2>
         <p className="mx-auto mt-4 max-w-xl leading-7 text-white/66">
           {isDraw
             ? `Final score: ${result?.scores.red ?? 0} - ${result?.scores.blue ?? 0}.`
-            : `${result?.winnerTeamName ?? "Winner"} is cooking, ${result?.loserTeamName ?? "the loser"} is cooked.`}
+            : `${result?.winnerTeamName ?? "Winner"} takes this one. ${result?.loserTeamName ?? "The other team"} can run it back with a new game.`}
         </p>
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <div className="rounded-lg border border-white/10 p-4">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-punch">Red</p>
-            <p className="mt-2 text-4xl font-black">{result?.scores.red ?? 0}</p>
-          </div>
-          <div className="rounded-lg border border-white/10 p-4">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-surge">Blue</p>
-            <p className="mt-2 text-4xl font-black">{result?.scores.blue ?? 0}</p>
-          </div>
+        <div className="mt-7 grid gap-3 sm:grid-cols-2">
+          {finalScores.map((team) => (
+            <div
+              key={team.id}
+              className={`rounded-lg border p-5 text-left ${team.tone.border} ${
+                team.isWinner || isDraw ? `${team.tone.bg} shadow-glow` : "bg-white/6"
+              }`}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className={`text-xs font-black uppercase tracking-[0.2em] ${team.tone.text}`}>
+                    {team.isWinner ? "Winner" : isDraw ? "Draw" : "Final"}
+                  </p>
+                  <h3 className="mt-2 text-2xl font-black">{team.label}</h3>
+                </div>
+                {team.isWinner ? <Trophy className="text-flare" size={30} /> : null}
+              </div>
+              <p className={`mt-5 text-6xl font-black ${team.tone.text}`}>{team.score}</p>
+            </div>
+          ))}
         </div>
         {error ? <p className="mt-4 text-sm font-bold text-punch">{error}</p> : null}
-        <div className="mt-7 flex flex-wrap justify-center gap-3">
+        <div className="mx-auto mt-7 grid max-w-3xl gap-3 sm:grid-cols-3">
           <Button to="/home" icon={Home}>
             Back Home
           </Button>
@@ -1301,6 +1511,9 @@ export function FinalWinnerPage() {
             Reset Room
           </Button>
         </div>
+        {!isHost ? (
+          <p className="mt-3 text-sm font-bold text-white/48">Only the host can change or reset the room.</p>
+        ) : null}
       </Panel>
     </PageScaffold>
   );
