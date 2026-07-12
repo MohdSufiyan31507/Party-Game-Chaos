@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   LogOut,
   Gamepad2,
@@ -88,6 +88,7 @@ function ThemePicker({ compact = false }: { compact?: boolean }) {
 
 export function AppLayout({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth();
+  const location = useLocation();
 
   return (
     <div className="min-h-screen bg-ink pb-24 text-white lg:pb-0">

@@ -4,7 +4,7 @@ import { PageTransition } from "../components/ui/PageTransition";
 
 export function LandingPage() {
   return (
-    <PageTransition className="min-h-screen bg-ink text-white">
+    <PageTransition className="dark-stage min-h-screen bg-[#070817] text-white">
       <section className="relative grid min-h-screen content-center overflow-hidden px-4 py-12">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(182,55,255,0.32),transparent_28%),radial-gradient(circle_at_78%_12%,rgba(255,157,46,0.20),transparent_30%),linear-gradient(135deg,#070817,#15113A_55%,#25112A)]" />
         <div className="page-grid absolute inset-0 bg-grid opacity-45" />

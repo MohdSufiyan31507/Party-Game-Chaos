@@ -308,6 +308,11 @@ textarea {
   color: rgb(var(--color-foreground)) !important;
 }
 
+.dark-stage,
+.dark-stage .text-white {
+  color: #ffffff !important;
+}
+
 :root[data-tone="light"] .text-white\/24,
 :root[data-tone="light"] .text-white\/30,
 :root[data-tone="light"] .text-white\/38,
@@ -329,6 +334,47 @@ textarea {
 :root[data-tone="light"] .text-white\/70,
 :root[data-tone="light"] .text-white\/80 {
   color: rgb(var(--color-muted)) !important;
+}
+
+.dark-stage .text-white\/24 {
+  color: rgb(255 255 255 / 0.24) !important;
+}
+
+.dark-stage .text-white\/30 {
+  color: rgb(255 255 255 / 0.3) !important;
+}
+
+.dark-stage .text-white\/38 {
+  color: rgb(255 255 255 / 0.38) !important;
+}
+
+.dark-stage .text-white\/40 {
+  color: rgb(255 255 255 / 0.4) !important;
+}
+
+.dark-stage .text-white\/42 {
+  color: rgb(255 255 255 / 0.42) !important;
+}
+
+.dark-stage .text-white\/44,
+.dark-stage .text-white\/45,
+.dark-stage .text-white\/46,
+.dark-stage .text-white\/48,
+.dark-stage .text-white\/50 {
+  color: rgb(255 255 255 / 0.48) !important;
+}
+
+.dark-stage .text-white\/54,
+.dark-stage .text-white\/55,
+.dark-stage .text-white\/56,
+.dark-stage .text-white\/58,
+.dark-stage .text-white\/62,
+.dark-stage .text-white\/64,
+.dark-stage .text-white\/66,
+.dark-stage .text-white\/68,
+.dark-stage .text-white\/70,
+.dark-stage .text-white\/80 {
+  color: rgb(255 255 255 / 0.68) !important;
 }
 
 :root[data-tone="light"] .bg-white\/5,

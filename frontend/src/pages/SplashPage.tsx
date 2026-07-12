@@ -5,7 +5,7 @@ import gameImage from "../assets/chaos-ka-adda-game-image.png";
 
 export function SplashPage() {
   return (
-    <main className="relative grid min-h-screen place-items-center overflow-hidden bg-ink px-4 text-center text-white">
+    <main className="dark-stage relative grid min-h-screen place-items-center overflow-hidden bg-[#070817] px-4 text-center text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(32,217,255,0.26),transparent_30%),radial-gradient(circle_at_70%_70%,rgba(255,63,143,0.28),transparent_32%),linear-gradient(135deg,#070817,#18133A)]" />
       <div className="page-grid absolute inset-0 bg-grid opacity-40" />
       <motion.section

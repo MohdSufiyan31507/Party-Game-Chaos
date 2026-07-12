@@ -14,13 +14,9 @@ import {
 import { PageScaffold } from "./PageScaffold";
 
 export function ProfilePage() {
-  const { token, user, refreshUser } = useAuth();
+  const { token, user } = useAuth();
   const [recentRooms, setRecentRooms] = useState<RecentRoom[]>([]);
   const initial = user?.username?.slice(0, 1).toUpperCase() ?? "C";
-
-  useEffect(() => {
-    void refreshUser();
-  }, [refreshUser]);
 
   useEffect(() => {
     if (!token) return;
@@ -206,7 +202,7 @@ export function AboutPage() {
 
 export function NotFoundPage() {
   return (
-    <main className="grid min-h-screen place-items-center bg-ink px-4 text-center text-white">
+    <main className="dark-stage grid min-h-screen place-items-center bg-[#070817] px-4 text-center text-white">
       <section>
         <p className="text-xs font-black uppercase tracking-[0.3em] text-punch">404</p>
         <h1 className="mt-4 text-5xl font-black">Wrong room code.</h1>
