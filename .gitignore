@@ -7,9 +7,11 @@ backend/dist
 backend/.env
 backend/.env.*
 !backend/.env.example
+!backend/.env.production.example
 frontend/.env
 frontend/.env.*
 !frontend/.env.example
+!frontend/.env.production.example
 .vercel
 .render
 *.log
