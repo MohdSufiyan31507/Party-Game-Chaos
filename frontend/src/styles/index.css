@@ -480,9 +480,10 @@ textarea {
 }
 
 .show-title {
-  display: inline-block;
-  padding-block: 0.06em 0.1em;
-  line-height: 1.08;
+  display: block;
+  overflow: visible;
+  padding-block: 0.08em 0.22em;
+  line-height: 1.18;
   color: transparent;
   background:
     linear-gradient(
@@ -495,6 +496,7 @@ textarea {
   background-size: 220% 100%;
   background-clip: text;
   -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   animation: title-shift 7s ease-in-out infinite;
 }
 

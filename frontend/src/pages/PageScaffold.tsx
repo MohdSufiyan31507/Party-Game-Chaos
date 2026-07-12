@@ -25,7 +25,7 @@ export function PageScaffold({
             Live Stage
           </span>
         </div>
-        <h1 className="show-title mt-3 text-4xl font-black leading-[1.08] sm:text-6xl">
+        <h1 className="show-title mt-3 text-4xl font-black leading-[1.18] sm:text-6xl">
           {title}
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-white/64 sm:text-lg sm:leading-8">
