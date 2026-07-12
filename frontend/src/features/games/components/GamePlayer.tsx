@@ -1,4 +1,5 @@
 import { Check, RotateCcw, SkipForward } from "lucide-react";
+import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { Button } from "../../../components/ui/Button";
 import { Panel } from "../../../components/ui/Panel";
@@ -43,17 +44,23 @@ export function GamePlayer({ game }: { game: GameDefinition }) {
   }
 
   return (
-    <Panel className="text-center">
-      <p className="text-xs font-black uppercase tracking-[0.26em] text-surge">
+    <Panel className="prompt-stage text-center">
+      <p className="show-chip inline-flex rounded-md border border-surge/25 bg-surge/10 px-3 py-1.5 text-xs font-black uppercase tracking-[0.22em] text-surge">
         {label}
       </p>
-      <h2 className="mx-auto mt-5 max-w-3xl text-3xl font-black leading-tight sm:text-6xl">
+      <motion.h2
+        key={currentCard.prompt}
+        className="show-title mx-auto mt-5 max-w-3xl text-3xl font-black leading-tight sm:text-6xl"
+        initial={{ opacity: 0, y: 18, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ type: "spring", stiffness: 260, damping: 22 }}
+      >
         {currentCard.prompt}
-      </h2>
+      </motion.h2>
       <p className="mx-auto mt-4 max-w-xl leading-7 text-white/62">
         {currentCard.helperText}
       </p>
-      <p className="mt-4 inline-flex rounded-md border border-lime/25 bg-lime/10 px-3 py-2 text-sm font-black text-lime">
+      <p className="show-chip mt-4 inline-flex rounded-md border border-lime/25 bg-lime/10 px-3 py-2 text-sm font-black text-lime">
         Answer: {currentCard.answer}
       </p>
       <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -62,11 +69,11 @@ export function GamePlayer({ game }: { game: GameDefinition }) {
           ["Skips", skips],
           ["Score", score],
         ].map(([labelText, value]) => (
-          <div key={labelText} className="rounded-lg border border-white/10 p-4">
+          <div key={labelText} className="show-stat rounded-lg border border-white/10 bg-white/5 p-4">
             <p className="text-xs font-black uppercase tracking-[0.2em] text-white/42">
               {labelText}
             </p>
-            <p className="mt-2 text-3xl font-black">{value}</p>
+            <p className="score-pop mt-2 text-3xl font-black">{value}</p>
           </div>
         ))}
       </div>

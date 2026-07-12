@@ -16,11 +16,16 @@ export function PageScaffold({
 }) {
   return (
     <PageTransition className="space-y-6">
-      <section className="py-2 sm:py-4">
-        <p className="text-xs font-black uppercase tracking-[0.28em] text-surge">
-          {eyebrow}
-        </p>
-        <h1 className="mt-3 text-4xl font-black leading-none sm:text-6xl">
+      <section className="relative overflow-hidden py-2 sm:py-4">
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <p className="show-chip inline-flex rounded-md border border-surge/25 bg-surge/10 px-3 py-1.5 text-xs font-black uppercase tracking-[0.24em] text-surge">
+            {eyebrow}
+          </p>
+          <span className="show-chip inline-flex rounded-md border border-flare/25 bg-flare/10 px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-flare">
+            Live Stage
+          </span>
+        </div>
+        <h1 className="show-title mt-3 text-4xl font-black leading-none sm:text-6xl">
           {title}
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-white/64 sm:text-lg sm:leading-8">

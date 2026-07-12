@@ -94,10 +94,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
       <div className="theme-backdrop fixed inset-0 -z-10 transition duration-500" />
       <div className="page-grid fixed inset-0 -z-10 bg-grid opacity-45" />
 
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-ink/75 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-white/10 bg-ink/75 shadow-[0_12px_34px_rgb(0_0_0/0.18)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <NavLink to="/home" className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-lg border border-surge/40 bg-surge/15 text-surge shadow-glow">
+            <span className="grid size-11 place-items-center rounded-lg border border-surge/40 bg-surge/15 text-surge shadow-glow transition hover:rotate-6 hover:scale-105">
               <Sparkles size={22} aria-hidden="true" />
             </span>
             <span>
@@ -116,8 +116,8 @@ export function AppLayout({ children }: { children: ReactNode }) {
                 className={({ isActive }) =>
                   `inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-bold transition ${
                     isActive
-                      ? "bg-white/12 text-surge"
-                      : "text-white/62 hover:bg-white/8 hover:text-white"
+                      ? "show-chip bg-surge/15 text-surge shadow-glow"
+                      : "text-white/62 hover:bg-white/8 hover:text-white hover:-translate-y-0.5"
                   }`
                 }
               >
@@ -141,10 +141,15 @@ export function AppLayout({ children }: { children: ReactNode }) {
       <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[1fr_280px]">
         <div>{children}</div>
         <aside className="hidden lg:block">
-          <div className="chaos-surface sticky top-24 rounded-lg p-5">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-punch">
-              Party Host: {user?.username ?? "Player"}
-            </p>
+          <div className="chaos-surface show-panel sticky top-24 rounded-lg p-5">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-punch">
+                Party Host: {user?.username ?? "Player"}
+              </p>
+              <span className="show-chip rounded-md border border-lime/25 bg-lime/10 px-2 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-lime">
+                On Air
+              </span>
+            </div>
             <p className="mt-3 text-xl font-black leading-tight">
               {narratorFor(location.pathname)}
             </p>
@@ -166,7 +171,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
               to={href}
               className={({ isActive }) =>
                 `flex min-h-14 flex-col items-center justify-center gap-1 rounded-lg text-[11px] font-black transition ${
-                  isActive ? "bg-white/12 text-surge" : "text-white/58"
+                  isActive ? "show-chip bg-surge/15 text-surge" : "text-white/58 hover:bg-white/8"
                 }`
               }
             >

@@ -265,13 +265,34 @@ textarea {
 }
 
 .chaos-surface {
+  position: relative;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.13);
   background: linear-gradient(
     145deg,
     rgba(255, 255, 255, 0.12),
     rgba(255, 255, 255, 0.045)
   );
+  box-shadow:
+    0 20px 54px rgb(0 0 0 / 0.22),
+    inset 0 1px 0 rgb(255 255 255 / 0.12);
   backdrop-filter: blur(18px);
+}
+
+.chaos-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-punch)),
+    rgb(var(--color-flare)),
+    rgb(var(--color-lime)),
+    rgb(var(--color-surge)),
+    rgb(var(--color-plasma))
+  );
+  opacity: 0.82;
 }
 
 :root[data-tone="light"] .chaos-surface {
@@ -331,11 +352,171 @@ textarea {
 .page-grid {
   background-size: 34px 34px;
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.92), transparent 78%);
+  animation: grid-drift 18s linear infinite;
 }
 
 .theme-backdrop {
   background:
-    radial-gradient(circle at 18% 8%, rgb(var(--backdrop-a) / 0.28), transparent 28%),
-    radial-gradient(circle at 88% 12%, rgb(var(--backdrop-b) / 0.18), transparent 28%),
+    radial-gradient(circle at 18% 8%, rgb(var(--backdrop-a) / 0.34), transparent 28%),
+    radial-gradient(circle at 88% 12%, rgb(var(--backdrop-b) / 0.24), transparent 28%),
+    radial-gradient(circle at 50% 92%, rgb(var(--color-flare) / 0.18), transparent 30%),
     linear-gradient(135deg, rgb(var(--color-ink)), rgb(var(--color-void)) 55%, rgb(var(--backdrop-c)));
+  background-size: 130% 130%;
+  animation: stage-pan 14s ease-in-out infinite alternate;
+}
+
+.show-panel {
+  isolation: isolate;
+}
+
+.show-panel::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 18% 0%, rgb(var(--color-surge) / 0.12), transparent 26%),
+    radial-gradient(circle at 88% 12%, rgb(var(--color-punch) / 0.1), transparent 24%);
+  pointer-events: none;
+}
+
+.show-button {
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 10px 24px rgb(0 0 0 / 0.16),
+    inset 0 1px 0 rgb(255 255 255 / 0.12);
+}
+
+.show-button::after {
+  content: "";
+  position: absolute;
+  inset: -120% auto -120% -34%;
+  width: 30%;
+  transform: rotate(16deg);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.38), transparent);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.show-button:hover::after,
+.show-button:focus-visible::after {
+  animation: button-sheen 780ms ease;
+  opacity: 1;
+}
+
+.show-title {
+  display: inline-block;
+  color: transparent;
+  background:
+    linear-gradient(
+      92deg,
+      rgb(var(--color-foreground)),
+      rgb(var(--color-surge)),
+      rgb(var(--color-flare)),
+      rgb(var(--color-punch))
+    );
+  background-size: 220% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: title-shift 7s ease-in-out infinite;
+}
+
+.show-chip {
+  box-shadow:
+    0 0 18px rgb(var(--color-surge) / 0.18),
+    inset 0 1px 0 rgb(255 255 255 / 0.14);
+}
+
+.show-stat,
+.game-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.show-stat::after,
+.game-card::after {
+  content: "";
+  position: absolute;
+  inset: auto 12px 10px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgb(var(--color-surge)), rgb(var(--color-flare)), rgb(var(--color-punch)));
+  opacity: 0.38;
+}
+
+.game-card {
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.game-card:hover {
+  box-shadow:
+    0 18px 48px rgb(var(--color-surge) / 0.16),
+    0 0 0 1px rgb(var(--color-surge) / 0.16);
+}
+
+.prompt-stage {
+  background:
+    radial-gradient(circle at top, rgb(var(--color-flare) / 0.18), transparent 34%),
+    linear-gradient(145deg, rgb(var(--color-panel) / 0.08), rgb(var(--color-panel) / 0.02));
+}
+
+.score-pop {
+  text-shadow:
+    0 0 22px rgb(var(--color-surge) / 0.34),
+    0 0 44px rgb(var(--color-punch) / 0.22);
+}
+
+@keyframes stage-pan {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: 100% 60%;
+  }
+}
+
+@keyframes grid-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 34px 34px;
+  }
+}
+
+@keyframes button-sheen {
+  from {
+    left: -34%;
+  }
+  to {
+    left: 118%;
+  }
+}
+
+@keyframes title-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-grid,
+  .theme-backdrop,
+  .show-title {
+    animation: none;
+  }
+
+  .show-button:hover::after,
+  .show-button:focus-visible::after {
+    animation: none;
+  }
 }

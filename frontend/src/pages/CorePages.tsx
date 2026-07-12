@@ -50,9 +50,9 @@ function RoomFlowRail({ current }: { current: string }) {
         return (
           <motion.div
             key={step}
-            className={`rounded-lg border px-3 py-2 text-center text-xs font-black uppercase tracking-[0.14em] ${
+            className={`show-chip rounded-lg border px-3 py-2 text-center text-xs font-black uppercase tracking-[0.14em] ${
               isCurrent
-                ? "border-flare/60 bg-flare/15 text-flare"
+                ? "border-flare/60 bg-flare/15 text-flare shadow-hot"
                 : isPast
                   ? "border-lime/35 bg-lime/10 text-lime"
                   : "border-white/10 bg-white/5 text-white/40"
@@ -718,15 +718,15 @@ export function GameSelectionPage() {
     >
       <RoomFlowRail current="Game" />
       <div className="mb-5 grid gap-3 sm:grid-cols-3">
-        <div className="rounded-lg border border-lime/25 bg-lime/10 p-4">
+        <div className="show-stat rounded-lg border border-lime/25 bg-lime/10 p-4">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-lime">Playable</p>
           <p className="mt-1 text-3xl font-black">{gameCards.filter((game) => game.status === "MVP").length}</p>
         </div>
-        <div className="rounded-lg border border-white/10 bg-white/6 p-4">
+        <div className="show-stat rounded-lg border border-white/10 bg-white/6 p-4">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-white/44">Library</p>
           <p className="mt-1 text-3xl font-black">{gameCards.length}</p>
         </div>
-        <div className="rounded-lg border border-flare/25 bg-flare/10 p-4">
+        <div className="show-stat rounded-lg border border-flare/25 bg-flare/10 p-4">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-flare">Selected</p>
           <p className="mt-1 truncate text-2xl font-black">{selectedGame?.name ?? "None yet"}</p>
         </div>
@@ -735,7 +735,7 @@ export function GameSelectionPage() {
         {gameCards.map((game, index) => (
           <MotionLift key={game.id} delay={Math.min(index * 0.02, 0.18)} className="h-full">
             <Panel
-              className={`flex min-h-[270px] h-full flex-col transition ${
+              className={`game-card flex min-h-[270px] h-full flex-col transition ${
                 game.status === "MVP" ? "border-surge/40" : "opacity-70"
               } ${
                 activeRoom?.selectedGameId === game.id ? "border-flare/70 bg-flare/10" : ""
@@ -743,7 +743,7 @@ export function GameSelectionPage() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="mb-2 inline-flex rounded-md border border-white/10 bg-white/8 px-2 py-1 text-xs font-black uppercase tracking-[0.14em] text-white/48">
+                  <p className="show-chip mb-2 inline-flex rounded-md border border-white/10 bg-white/8 px-2 py-1 text-xs font-black uppercase tracking-[0.14em] text-white/48">
                     {gameKindLabel(game.kind)}
                   </p>
                   <h2 className="text-2xl font-black">{game.name}</h2>
@@ -1449,11 +1449,11 @@ export function LeaderboardPage() {
             <p className="text-xs font-black uppercase tracking-[0.18em] text-flare">Leader</p>
             <p className="mt-1 truncate text-2xl font-black">{scores[0]?.[0] ?? "No leader"}</p>
           </div>
-          <div className="rounded-lg border border-white/10 bg-white/6 p-4">
+          <div className="show-stat rounded-lg border border-white/10 bg-white/6 p-4">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-white/44">Score Gap</p>
             <p className="mt-1 text-3xl font-black">{scoreGap}</p>
           </div>
-          <div className="rounded-lg border border-lime/25 bg-lime/10 p-4">
+          <div className="show-stat rounded-lg border border-lime/25 bg-lime/10 p-4">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-lime">Round</p>
             <p className="mt-1 text-3xl font-black">{activeRoom?.gameplay?.round ?? 1}</p>
           </div>
@@ -1462,7 +1462,7 @@ export function LeaderboardPage() {
           {scores.map(([team, score, teamId, tone], index) => (
             <motion.div
               key={team as string}
-              className={`rounded-lg border p-5 ${tone.border} ${index === 0 ? `${tone.bg} shadow-glow` : "bg-white/6"}`}
+              className={`show-stat rounded-lg border p-5 ${tone.border} ${index === 0 ? `${tone.bg} shadow-glow` : "bg-white/6"}`}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.06 }}
@@ -1480,7 +1480,7 @@ export function LeaderboardPage() {
                 </span>
               </div>
               <div className="mt-5 flex items-end justify-between gap-3">
-                <AnimatedScore value={score} className={`text-6xl font-black ${tone.text}`} />
+                <AnimatedScore value={score} className={`score-pop text-6xl font-black ${tone.text}`} />
                 <span className="text-xs font-black uppercase tracking-[0.18em] text-white/38">
                   {teamId} Team
                 </span>
@@ -1591,7 +1591,7 @@ export function FinalWinnerPage() {
         <motion.div
           className="mx-auto grid size-24 place-items-center rounded-lg border border-flare/35 bg-flare/15 shadow-hot"
           initial={{ scale: 0.72, rotate: -8 }}
-          animate={{ scale: 1, rotate: 0 }}
+          animate={{ scale: [1, 1.06, 1], rotate: 0 }}
           transition={{ type: "spring", stiffness: 320, damping: 18 }}
         >
           {isDraw ? <Sparkles className="text-flare" size={54} /> : <Crown className="text-flare" size={54} />}
@@ -1599,7 +1599,7 @@ export function FinalWinnerPage() {
         <p className="mt-5 text-xs font-black uppercase tracking-[0.26em] text-flare">
           {isDraw ? "Final Score" : "Winner Locked"}
         </p>
-        <h2 className="mx-auto mt-3 max-w-3xl text-4xl font-black leading-tight sm:text-6xl">
+        <h2 className="show-title mx-auto mt-3 max-w-3xl text-4xl font-black leading-tight sm:text-6xl">
           {isDraw ? "Draw Game" : `${result?.winnerTeamName ?? "Winner"} Wins`}
         </h2>
         <p className="mx-auto mt-4 max-w-xl leading-7 text-white/66">
@@ -1611,7 +1611,7 @@ export function FinalWinnerPage() {
           {finalScores.map((team, index) => (
             <motion.div
               key={team.id}
-              className={`rounded-lg border p-5 text-left ${team.tone.border} ${
+              className={`show-stat rounded-lg border p-5 text-left ${team.tone.border} ${
                 team.isWinner || isDraw ? `${team.tone.bg} shadow-glow` : "bg-white/6"
               }`}
               initial={{ opacity: 0, y: 18 }}
@@ -1628,7 +1628,7 @@ export function FinalWinnerPage() {
                 </div>
                 {team.isWinner ? <Trophy className="text-flare" size={30} /> : null}
               </div>
-              <AnimatedScore value={team.score} className={`mt-5 block text-6xl font-black ${team.tone.text}`} />
+              <AnimatedScore value={team.score} className={`score-pop mt-5 block text-6xl font-black ${team.tone.text}`} />
             </motion.div>
           ))}
         </div>
