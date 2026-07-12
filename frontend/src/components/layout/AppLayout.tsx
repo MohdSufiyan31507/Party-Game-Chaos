@@ -26,43 +26,51 @@ const navItems = [
 
 function ThemePicker({ compact = false }: { compact?: boolean }) {
   const { theme, setTheme } = useTheme();
+  const activeTheme = themes.find((item) => item.id === theme) ?? themes[0];
 
   if (compact) {
     return (
-      <div className="grid grid-cols-5 gap-1.5">
-        {themes.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            title={item.description}
-            aria-label={`Use ${item.name} theme`}
-            onClick={() => setTheme(item.id)}
-            className={`min-h-7 rounded-lg border p-1 transition hover:-translate-y-0.5 ${
-              theme === item.id ? "border-flare bg-white/12" : "border-white/10 bg-white/5"
-            }`}
-          >
-            <span className="flex h-full overflow-hidden rounded-md">
-              {item.swatches.map((swatch) => (
-                <span key={swatch} className="flex-1" style={{ backgroundColor: swatch }} />
-              ))}
-            </span>
-          </button>
-        ))}
+      <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-2 py-1.5">
+        <Palette size={15} className="shrink-0 text-surge" aria-hidden="true" />
+        <span className="flex h-5 w-12 shrink-0 overflow-hidden rounded-md border border-white/10">
+          {activeTheme.swatches.map((swatch) => (
+            <span key={swatch} className="flex-1" style={{ backgroundColor: swatch }} />
+          ))}
+        </span>
+        <select
+          value={theme}
+          aria-label="Theme"
+          onChange={(event) => setTheme(event.target.value as ThemeId)}
+          className="min-h-8 flex-1 rounded-md border border-white/10 bg-ink/85 px-2 text-xs font-black text-white outline-none transition focus:border-surge/70 focus:ring-4 focus:ring-surge/10"
+        >
+          {themes.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.name}
+            </option>
+          ))}
+        </select>
       </div>
     );
   }
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 rounded-lg border border-white/10 bg-white/5 p-3">
       <label className="block">
-        <span className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-white/48">
-          <Palette size={14} aria-hidden="true" />
-          Theme
+        <span className="mb-2 flex items-center justify-between gap-2 text-xs font-black uppercase tracking-[0.18em] text-white/48">
+          <span className="flex items-center gap-2">
+            <Palette size={14} aria-hidden="true" />
+            Theme
+          </span>
+          <span className="flex h-5 w-14 overflow-hidden rounded-md border border-white/10">
+            {activeTheme.swatches.map((swatch) => (
+              <span key={swatch} className="flex-1" style={{ backgroundColor: swatch }} />
+            ))}
+          </span>
         </span>
         <select
           value={theme}
           onChange={(event) => setTheme(event.target.value as ThemeId)}
-          className="min-h-11 w-full rounded-lg border border-white/10 bg-ink/85 px-3 text-sm font-black text-white outline-none transition hover:border-surge/45 focus:border-surge/70 focus:ring-4 focus:ring-surge/10"
+          className="min-h-10 w-full rounded-lg border border-white/10 bg-ink/85 px-3 text-sm font-black text-white outline-none transition hover:border-surge/45 focus:border-surge/70 focus:ring-4 focus:ring-surge/10"
         >
           {themes.map((item) => (
             <option key={item.id} value={item.id}>
@@ -71,26 +79,9 @@ function ThemePicker({ compact = false }: { compact?: boolean }) {
           ))}
         </select>
       </label>
-      <div className="mt-3 grid grid-cols-5 gap-2">
-        {themes.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            title={item.description}
-            aria-label={`Use ${item.name} theme`}
-            onClick={() => setTheme(item.id)}
-            className={`min-h-9 rounded-lg border p-1 transition hover:-translate-y-0.5 ${
-              theme === item.id ? "border-flare bg-white/12" : "border-white/10 bg-white/5"
-            }`}
-          >
-            <span className="flex h-full overflow-hidden rounded-md">
-              {item.swatches.map((swatch) => (
-                <span key={swatch} className="flex-1" style={{ backgroundColor: swatch }} />
-              ))}
-            </span>
-          </button>
-        ))}
-      </div>
+      <p className="mt-2 text-xs font-semibold leading-5 text-white/54">
+        {activeTheme.description}
+      </p>
     </div>
   );
 }
