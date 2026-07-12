@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ChaosWheelLogo } from "../ui/ChaosWheelLogo";
+import { ChaosCardLogo } from "../ui/ChaosCardLogo";
 
 export function AuthLayout({
   title,
@@ -19,7 +19,7 @@ export function AuthLayout({
           <div>
             <Link to="/landing" className="inline-flex items-center gap-3">
               <span className="grid size-12 place-items-center rounded-lg border border-surge/40 bg-surge/15 text-surge shadow-glow">
-                <ChaosWheelLogo size={29} />
+                <ChaosCardLogo size={30} />
               </span>
               <span className="stage-copy font-black uppercase tracking-[0.2em]">
                 The Chaos Games

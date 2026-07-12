@@ -13,7 +13,7 @@ import {
 import { useAuth } from "../../contexts/AuthContext";
 import { themes, useTheme, type ThemeId } from "../../contexts/ThemeContext";
 import { narratorFor } from "../../utils/narrator";
-import { ChaosWheelLogo } from "../ui/ChaosWheelLogo";
+import { ChaosCardLogo } from "../ui/ChaosCardLogo";
 
 const navItems = [
   { label: "Adda", href: "/home", icon: Home },
@@ -99,7 +99,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <NavLink to="/home" className="flex items-center gap-3">
             <span className="grid size-11 place-items-center rounded-lg border border-surge/40 bg-surge/15 text-surge shadow-glow transition hover:rotate-6 hover:scale-105">
-              <ChaosWheelLogo size={27} />
+              <ChaosCardLogo size={28} />
             </span>
             <span>
               <span className="block text-xs font-black uppercase tracking-[0.28em] text-white/45">
