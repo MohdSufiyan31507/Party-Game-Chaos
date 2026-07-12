@@ -36,7 +36,7 @@ export function LoginPage() {
   }
 
   return (
-    <AuthLayout title="Welcome back, legend." subtitle="Login with your Chaos Ka Adda account.">
+    <AuthLayout title="Welcome back, chaos makers." subtitle="Login with your Chaos Ka Adda account.">
       <form className="space-y-5" onSubmit={handleSubmit}>
         <Field label="Email" name="email" type="email" placeholder="you@chaos.test" required />
         <Field label="Password" name="password" type="password" placeholder="Your password" required />
