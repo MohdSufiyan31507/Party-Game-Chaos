@@ -7,7 +7,17 @@ import {
   type ReactNode,
 } from "react";
 
-export type ThemeId = "neon" | "arcade" | "mango" | "mint";
+export type ThemeId =
+  | "neon"
+  | "arcade"
+  | "mango"
+  | "mint"
+  | "bollywood"
+  | "midnight"
+  | "candy"
+  | "lava"
+  | "ocean"
+  | "royal";
 
 const THEME_KEY = "chaos-ka-adda-theme";
 
@@ -40,6 +50,42 @@ export const themes: Array<{
     name: "Cyber Mint",
     description: "Cool greens, clean blues, and crisp glow.",
     swatches: ["#52FFB8", "#36A3FF", "#E8FF5A"],
+  },
+  {
+    id: "bollywood",
+    name: "Bollywood Bash",
+    description: "Gold, rose, and peacock-blue party lights.",
+    swatches: ["#FFD166", "#EF476F", "#00B4D8"],
+  },
+  {
+    id: "midnight",
+    name: "Midnight Club",
+    description: "Moody violet with icy blue highlights.",
+    swatches: ["#8B5CF6", "#38BDF8", "#F472B6"],
+  },
+  {
+    id: "candy",
+    name: "Candy Rush",
+    description: "Bubblegum, lemon, and electric blue.",
+    swatches: ["#FF6EC7", "#F9F871", "#45E0FF"],
+  },
+  {
+    id: "lava",
+    name: "Lava Mode",
+    description: "Hot reds, amber sparks, and danger glow.",
+    swatches: ["#FF3B30", "#FF9500", "#FFE66D"],
+  },
+  {
+    id: "ocean",
+    name: "Ocean Pulse",
+    description: "Deep sea blues with aqua and seafoam.",
+    swatches: ["#00C2FF", "#00F5D4", "#90F1EF"],
+  },
+  {
+    id: "royal",
+    name: "Royal Chaos",
+    description: "Regal purple, gold, and jewel green.",
+    swatches: ["#C084FC", "#FACC15", "#34D399"],
   },
 ];
 

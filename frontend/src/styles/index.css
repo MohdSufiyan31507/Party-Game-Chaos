@@ -63,6 +63,90 @@
   --backdrop-c: 9 55 62;
 }
 
+:root[data-theme="bollywood"] {
+  --color-ink: 19 9 24;
+  --color-void: 48 20 48;
+  --color-plasma: 190 80 255;
+  --color-surge: 0 180 216;
+  --color-punch: 239 71 111;
+  --color-flare: 255 209 102;
+  --color-lime: 6 214 160;
+  --color-grid: 255 209 102;
+  --backdrop-a: 239 71 111;
+  --backdrop-b: 0 180 216;
+  --backdrop-c: 72 32 72;
+}
+
+:root[data-theme="midnight"] {
+  --color-ink: 4 7 18;
+  --color-void: 15 23 42;
+  --color-plasma: 139 92 246;
+  --color-surge: 56 189 248;
+  --color-punch: 244 114 182;
+  --color-flare: 165 180 252;
+  --color-lime: 94 234 212;
+  --color-grid: 148 163 184;
+  --backdrop-a: 139 92 246;
+  --backdrop-b: 56 189 248;
+  --backdrop-c: 30 27 75;
+}
+
+:root[data-theme="candy"] {
+  --color-ink: 22 8 30;
+  --color-void: 50 22 62;
+  --color-plasma: 255 110 199;
+  --color-surge: 69 224 255;
+  --color-punch: 255 89 164;
+  --color-flare: 249 248 113;
+  --color-lime: 127 255 178;
+  --color-grid: 255 175 220;
+  --backdrop-a: 255 110 199;
+  --backdrop-b: 69 224 255;
+  --backdrop-c: 68 28 82;
+}
+
+:root[data-theme="lava"] {
+  --color-ink: 18 6 6;
+  --color-void: 45 12 9;
+  --color-plasma: 255 87 34;
+  --color-surge: 255 179 71;
+  --color-punch: 255 59 48;
+  --color-flare: 255 149 0;
+  --color-lime: 255 230 109;
+  --color-grid: 255 149 0;
+  --backdrop-a: 255 59 48;
+  --backdrop-b: 255 149 0;
+  --backdrop-c: 68 16 8;
+}
+
+:root[data-theme="ocean"] {
+  --color-ink: 2 13 24;
+  --color-void: 3 37 55;
+  --color-plasma: 72 149 239;
+  --color-surge: 0 194 255;
+  --color-punch: 0 245 212;
+  --color-flare: 144 241 239;
+  --color-lime: 128 255 219;
+  --color-grid: 0 194 255;
+  --backdrop-a: 0 194 255;
+  --backdrop-b: 0 245 212;
+  --backdrop-c: 5 60 82;
+}
+
+:root[data-theme="royal"] {
+  --color-ink: 12 8 26;
+  --color-void: 31 18 60;
+  --color-plasma: 192 132 252;
+  --color-surge: 52 211 153;
+  --color-punch: 244 114 182;
+  --color-flare: 250 204 21;
+  --color-lime: 74 222 128;
+  --color-grid: 192 132 252;
+  --backdrop-a: 192 132 252;
+  --backdrop-b: 250 204 21;
+  --backdrop-c: 52 24 89;
+}
+
 * {
   box-sizing: border-box;
 }

@@ -29,7 +29,7 @@ function ThemePicker({ compact = false }: { compact?: boolean }) {
 
   if (compact) {
     return (
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-5 gap-1.5">
         {themes.map((item) => (
           <button
             key={item.id}
@@ -37,7 +37,7 @@ function ThemePicker({ compact = false }: { compact?: boolean }) {
             title={item.description}
             aria-label={`Use ${item.name} theme`}
             onClick={() => setTheme(item.id)}
-            className={`min-h-8 rounded-lg border p-1 transition hover:-translate-y-0.5 ${
+            className={`min-h-7 rounded-lg border p-1 transition hover:-translate-y-0.5 ${
               theme === item.id ? "border-flare bg-white/12" : "border-white/10 bg-white/5"
             }`}
           >
@@ -71,7 +71,7 @@ function ThemePicker({ compact = false }: { compact?: boolean }) {
           ))}
         </select>
       </label>
-      <div className="mt-3 grid grid-cols-4 gap-2">
+      <div className="mt-3 grid grid-cols-5 gap-2">
         {themes.map((item) => (
           <button
             key={item.id}
