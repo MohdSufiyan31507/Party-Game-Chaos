@@ -481,6 +481,8 @@ textarea {
 
 .show-title {
   display: inline-block;
+  padding-block: 0.06em 0.1em;
+  line-height: 1.08;
   color: transparent;
   background:
     linear-gradient(

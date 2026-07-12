@@ -16,7 +16,7 @@ export function PageScaffold({
 }) {
   return (
     <PageTransition className="space-y-6">
-      <section className="relative overflow-hidden py-2 sm:py-4">
+      <section className="relative py-2 sm:py-4">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <p className="show-chip inline-flex rounded-md border border-surge/25 bg-surge/10 px-3 py-1.5 text-xs font-black uppercase tracking-[0.24em] text-surge">
             {eyebrow}
@@ -25,7 +25,7 @@ export function PageScaffold({
             Live Stage
           </span>
         </div>
-        <h1 className="show-title mt-3 text-4xl font-black leading-none sm:text-6xl">
+        <h1 className="show-title mt-3 text-4xl font-black leading-[1.08] sm:text-6xl">
           {title}
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-white/64 sm:text-lg sm:leading-8">
