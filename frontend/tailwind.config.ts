@@ -5,21 +5,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: "#070817",
-        void: "#10132B",
-        plasma: "#B637FF",
-        surge: "#20D9FF",
-        punch: "#FF3F8F",
-        flare: "#FF9D2E",
-        lime: "#4DFF91",
+        ink: "rgb(var(--color-ink) / <alpha-value>)",
+        void: "rgb(var(--color-void) / <alpha-value>)",
+        plasma: "rgb(var(--color-plasma) / <alpha-value>)",
+        surge: "rgb(var(--color-surge) / <alpha-value>)",
+        punch: "rgb(var(--color-punch) / <alpha-value>)",
+        flare: "rgb(var(--color-flare) / <alpha-value>)",
+        lime: "rgb(var(--color-lime) / <alpha-value>)",
       },
       boxShadow: {
-        glow: "0 0 34px rgba(32, 217, 255, 0.28)",
-        hot: "0 0 34px rgba(255, 63, 143, 0.24)",
+        glow: "0 0 34px rgb(var(--color-surge) / 0.28)",
+        hot: "0 0 34px rgb(var(--color-punch) / 0.24)",
       },
       backgroundImage: {
         grid:
-          "linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)",
+          "linear-gradient(rgb(var(--color-grid) / 0.08) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--color-grid) / 0.08) 1px, transparent 1px)",
       },
     },
   },

@@ -4,6 +4,7 @@ import {
   LogOut,
   Gamepad2,
   Home,
+  Palette,
   Settings,
   ShoppingBag,
   Sparkles,
@@ -11,6 +12,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
+import { themes, useTheme, type ThemeId } from "../../contexts/ThemeContext";
 import { narratorFor } from "../../utils/narrator";
 
 const navItems = [
@@ -22,12 +24,83 @@ const navItems = [
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
+function ThemePicker({ compact = false }: { compact?: boolean }) {
+  const { theme, setTheme } = useTheme();
+
+  if (compact) {
+    return (
+      <div className="grid grid-cols-4 gap-2">
+        {themes.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            title={item.description}
+            aria-label={`Use ${item.name} theme`}
+            onClick={() => setTheme(item.id)}
+            className={`min-h-8 rounded-lg border p-1 transition hover:-translate-y-0.5 ${
+              theme === item.id ? "border-flare bg-white/12" : "border-white/10 bg-white/5"
+            }`}
+          >
+            <span className="flex h-full overflow-hidden rounded-md">
+              {item.swatches.map((swatch) => (
+                <span key={swatch} className="flex-1" style={{ backgroundColor: swatch }} />
+              ))}
+            </span>
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-5">
+      <label className="block">
+        <span className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-white/48">
+          <Palette size={14} aria-hidden="true" />
+          Theme
+        </span>
+        <select
+          value={theme}
+          onChange={(event) => setTheme(event.target.value as ThemeId)}
+          className="min-h-11 w-full rounded-lg border border-white/10 bg-ink/85 px-3 text-sm font-black text-white outline-none transition hover:border-surge/45 focus:border-surge/70 focus:ring-4 focus:ring-surge/10"
+        >
+          {themes.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.name}
+            </option>
+          ))}
+        </select>
+      </label>
+      <div className="mt-3 grid grid-cols-4 gap-2">
+        {themes.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            title={item.description}
+            aria-label={`Use ${item.name} theme`}
+            onClick={() => setTheme(item.id)}
+            className={`min-h-9 rounded-lg border p-1 transition hover:-translate-y-0.5 ${
+              theme === item.id ? "border-flare bg-white/12" : "border-white/10 bg-white/5"
+            }`}
+          >
+            <span className="flex h-full overflow-hidden rounded-md">
+              {item.swatches.map((swatch) => (
+                <span key={swatch} className="flex-1" style={{ backgroundColor: swatch }} />
+              ))}
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function AppLayout({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth();
 
   return (
     <div className="min-h-screen bg-ink pb-24 text-white lg:pb-0">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_18%_8%,rgba(182,55,255,0.28),transparent_28%),radial-gradient(circle_at_88%_12%,rgba(32,217,255,0.18),transparent_28%),linear-gradient(135deg,#070817,#111433_55%,#1E102F)]" />
+      <div className="theme-backdrop fixed inset-0 -z-10 transition duration-500" />
       <div className="page-grid fixed inset-0 -z-10 bg-grid opacity-45" />
 
       <header className="sticky top-0 z-30 border-b border-white/10 bg-ink/75 backdrop-blur-xl">
@@ -88,12 +161,14 @@ export function AppLayout({ children }: { children: ReactNode }) {
               Live rooms, team setup, realtime gameplay, and scores are running
               through the full-stack party engine.
             </p>
+            <ThemePicker />
           </div>
         </aside>
       </div>
 
       <nav className="fixed inset-x-3 bottom-3 z-40 rounded-lg border border-white/10 bg-ink/90 p-2 shadow-glow backdrop-blur-xl lg:hidden">
-        <div className="grid grid-cols-5 gap-1">
+        <ThemePicker compact />
+        <div className="mt-2 grid grid-cols-5 gap-1">
           {navItems.slice(0, 5).map(({ label, href, icon: Icon }) => (
             <NavLink
               key={href}

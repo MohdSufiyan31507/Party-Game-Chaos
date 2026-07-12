@@ -4,16 +4,19 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { AuthProvider } from "./contexts/AuthContext";
 import { RoomProvider } from "./contexts/RoomContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import "./styles/index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <RoomProvider>
-          <App />
-        </RoomProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <RoomProvider>
+            <App />
+          </RoomProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,
 );
