@@ -23,6 +23,7 @@ export type ThemeId =
   | "lilac";
 
 const THEME_KEY = "chaos-ka-adda-theme";
+const DEFAULT_THEME: ThemeId = "arcade";
 
 export const themes: Array<{
   id: ThemeId;
@@ -142,7 +143,7 @@ function themeTone(themeId: ThemeId) {
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<ThemeId>(() => {
     const savedTheme = localStorage.getItem(THEME_KEY);
-    return isThemeId(savedTheme) ? savedTheme : "arcade";
+    return isThemeId(savedTheme) ? savedTheme : DEFAULT_THEME;
   });
 
   useEffect(() => {
