@@ -1,4 +1,5 @@
-import { FormEvent, useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { FormEvent, useEffect, useState, type ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   ArrowRight,
@@ -47,7 +48,7 @@ function RoomFlowRail({ current }: { current: string }) {
         const isPast = flowSteps.indexOf(current) > index;
 
         return (
-          <div
+          <motion.div
             key={step}
             className={`rounded-lg border px-3 py-2 text-center text-xs font-black uppercase tracking-[0.14em] ${
               isCurrent
@@ -56,9 +57,13 @@ function RoomFlowRail({ current }: { current: string }) {
                   ? "border-lime/35 bg-lime/10 text-lime"
                   : "border-white/10 bg-white/5 text-white/40"
             }`}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.04, duration: 0.22 }}
+            whileHover={{ y: -2 }}
           >
             {step}
-          </div>
+          </motion.div>
         );
       })}
     </div>
@@ -85,6 +90,78 @@ function gameKindLabel(kind: string) {
   if (kind === "rapid_fire") return "Fast";
   if (kind === "emoji") return "Emoji";
   return "Guessing";
+}
+
+function MotionLift({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  return (
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, duration: 0.28, ease: "easeOut" }}
+      whileHover={{ y: -4, scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function AnimatedScore({
+  value,
+  className = "",
+}: {
+  value: number | string;
+  className?: string;
+}) {
+  return (
+    <motion.span
+      key={String(value)}
+      className={className}
+      initial={{ scale: 0.86, opacity: 0.45, y: 8 }}
+      animate={{ scale: 1, opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 420, damping: 24 }}
+    >
+      {value}
+    </motion.span>
+  );
+}
+
+function ScoreMeter({ red, blue }: { red: number; blue: number }) {
+  const total = Math.max(red + blue, 1);
+  const redWidth = `${Math.max(8, (red / total) * 100)}%`;
+  const blueWidth = `${Math.max(8, (blue / total) * 100)}%`;
+
+  return (
+    <div className="overflow-hidden rounded-lg border border-white/10 bg-white/6 p-2">
+      <div className="flex h-3 overflow-hidden rounded-md bg-white/8">
+        <motion.div
+          className="bg-punch"
+          initial={{ width: 0 }}
+          animate={{ width: redWidth }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+        />
+        <motion.div
+          className="bg-surge"
+          initial={{ width: 0 }}
+          animate={{ width: blueWidth }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+        />
+      </div>
+      <div className="mt-2 flex justify-between text-xs font-black uppercase tracking-[0.16em] text-white/44">
+        <span>Red {red}</span>
+        <span>Blue {blue}</span>
+      </div>
+    </div>
+  );
 }
 
 export function HomeDashboardPage() {
@@ -513,31 +590,45 @@ export function TeamSetupPage() {
     >
       <RoomFlowRail current="Teams" />
       <div className="grid gap-5 md:grid-cols-2">
-        {teams.map((team) => (
-          <Panel key={team.id} className={team.accent === "red" ? "border-punch/35" : "border-surge/35"}>
-            <h2 className={`text-3xl font-black ${team.accent === "red" ? "text-punch" : "text-surge"}`}>
-              {team.name}
-            </h2>
-            <div className="mt-5 space-y-3">
-              {(team.memberNames?.length ?? 0) > 0 ? (
-                team.memberNames?.map((memberName) => (
-                  <div key={memberName} className="rounded-lg bg-white/8 p-3 font-bold">
-                    {memberName}
+        {teams.map((team, index) => (
+          <MotionLift key={team.id} delay={index * 0.05}>
+            <Panel className={team.accent === "red" ? "border-punch/35" : "border-surge/35"}>
+              <h2 className={`text-3xl font-black ${team.accent === "red" ? "text-punch" : "text-surge"}`}>
+                {team.name}
+              </h2>
+              <div className="mt-5 space-y-3">
+                {(team.memberNames?.length ?? 0) > 0 ? (
+                  team.memberNames?.map((memberName, memberIndex) => (
+                    <motion.div
+                      key={memberName}
+                      className="rounded-lg bg-white/8 p-3 font-bold"
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: memberIndex * 0.03 }}
+                    >
+                      {memberName}
+                    </motion.div>
+                  ))
+                ) : team.playerIds.length ? (
+                  team.playerIds.map((playerId, playerIndex) => (
+                    <motion.div
+                      key={playerId}
+                      className="rounded-lg bg-white/8 p-3 font-bold"
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: playerIndex * 0.03 }}
+                    >
+                      {playerById.get(playerId)?.username ?? "Unknown Player"}
+                    </motion.div>
+                  ))
+                ) : (
+                  <div className="rounded-lg border border-white/10 p-3 text-sm font-bold text-white/48">
+                    Waiting for players
                   </div>
-                ))
-              ) : team.playerIds.length ? (
-                team.playerIds.map((playerId) => (
-                  <div key={playerId} className="rounded-lg bg-white/8 p-3 font-bold">
-                    {playerById.get(playerId)?.username ?? "Unknown Player"}
-                  </div>
-                ))
-              ) : (
-                <div className="rounded-lg border border-white/10 p-3 text-sm font-bold text-white/48">
-                  Waiting for players
-                </div>
-              )}
-            </div>
-          </Panel>
+                )}
+              </div>
+            </Panel>
+          </MotionLift>
         ))}
       </div>
       <StatusNote tone={isHost ? "success" : "info"}>
@@ -641,55 +732,56 @@ export function GameSelectionPage() {
         </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {gameCards.map((game) => (
-          <Panel
-            key={game.id}
-            className={`flex min-h-[270px] flex-col ${
-              game.status === "MVP" ? "border-surge/40" : "opacity-70"
-            } ${
-              activeRoom?.selectedGameId === game.id ? "border-flare/70 bg-flare/10" : ""
-            }`}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="mb-2 inline-flex rounded-md border border-white/10 bg-white/8 px-2 py-1 text-xs font-black uppercase tracking-[0.14em] text-white/48">
-                  {gameKindLabel(game.kind)}
-                </p>
-                <h2 className="text-2xl font-black">{game.name}</h2>
-              </div>
-              <span
-                className={`shrink-0 rounded-md px-2 py-1 text-xs font-black ${
-                  game.status === "MVP"
-                    ? "border border-lime/25 bg-lime/10 text-lime"
-                    : "bg-white/8 text-white/46"
-                }`}
-              >
-                {game.status === "MVP" ? "Play Live" : "Coming Later"}
-              </span>
-            </div>
-            <p className="mt-3 text-sm leading-6 text-white/62">{game.description}</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <span className="rounded-md border border-flare/25 bg-flare/10 px-2 py-1 text-xs font-black uppercase tracking-[0.12em] text-flare">
-                {game.difficulty}
-              </span>
-              <span className="rounded-md border border-white/10 bg-white/6 px-2 py-1 text-xs font-black uppercase tracking-[0.12em] text-white/48">
-                {game.categories.length} Categories
-              </span>
-            </div>
-            <Button
-              type="button"
-              tone={activeRoom?.selectedGameId === game.id ? "orange" : "ghost"}
-              className="mt-auto w-full"
-              disabled={!isHost || isRoomLoading || game.status !== "MVP"}
-              onClick={() => handleSelectGame(game.id)}
+        {gameCards.map((game, index) => (
+          <MotionLift key={game.id} delay={Math.min(index * 0.02, 0.18)} className="h-full">
+            <Panel
+              className={`flex min-h-[270px] h-full flex-col transition ${
+                game.status === "MVP" ? "border-surge/40" : "opacity-70"
+              } ${
+                activeRoom?.selectedGameId === game.id ? "border-flare/70 bg-flare/10" : ""
+              }`}
             >
-              {game.status !== "MVP"
-                ? "Coming Later"
-                : activeRoom?.selectedGameId === game.id
-                  ? "Selected"
-                  : "Select"}
-            </Button>
-          </Panel>
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="mb-2 inline-flex rounded-md border border-white/10 bg-white/8 px-2 py-1 text-xs font-black uppercase tracking-[0.14em] text-white/48">
+                    {gameKindLabel(game.kind)}
+                  </p>
+                  <h2 className="text-2xl font-black">{game.name}</h2>
+                </div>
+                <span
+                  className={`shrink-0 rounded-md px-2 py-1 text-xs font-black ${
+                    game.status === "MVP"
+                      ? "border border-lime/25 bg-lime/10 text-lime"
+                      : "bg-white/8 text-white/46"
+                  }`}
+                >
+                  {game.status === "MVP" ? "Play Live" : "Coming Later"}
+                </span>
+              </div>
+              <p className="mt-3 text-sm leading-6 text-white/62">{game.description}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="rounded-md border border-flare/25 bg-flare/10 px-2 py-1 text-xs font-black uppercase tracking-[0.12em] text-flare">
+                  {game.difficulty}
+                </span>
+                <span className="rounded-md border border-white/10 bg-white/6 px-2 py-1 text-xs font-black uppercase tracking-[0.12em] text-white/48">
+                  {game.categories.length} Categories
+                </span>
+              </div>
+              <Button
+                type="button"
+                tone={activeRoom?.selectedGameId === game.id ? "orange" : "ghost"}
+                className="mt-auto w-full"
+                disabled={!isHost || isRoomLoading || game.status !== "MVP"}
+                onClick={() => handleSelectGame(game.id)}
+              >
+                {game.status !== "MVP"
+                  ? "Coming Later"
+                  : activeRoom?.selectedGameId === game.id
+                    ? "Selected"
+                    : "Select"}
+              </Button>
+            </Panel>
+          </MotionLift>
         ))}
       </div>
       <div className="mt-5">
@@ -754,34 +846,41 @@ export function CategorySelectionPage() {
       <RoomFlowRail current="Category" />
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((category, index) => (
-          <Panel
-            key={category}
-            className={
-              activeRoom?.selectedCategory === category
-                ? "border-flare/70 bg-flare/10"
-                : index < 3
-                  ? "border-surge/35"
-                  : ""
-            }
-          >
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-lg font-black">{category}</p>
-              {activeRoom?.selectedCategory === category ? (
-                <CheckCircle2 className="text-flare" size={22} />
-              ) : (
-                <Circle className="text-white/24" size={18} />
-              )}
-            </div>
-            <Button
-              type="button"
-              tone={activeRoom?.selectedCategory === category ? "orange" : "ghost"}
-              className="mt-4 w-full"
-              disabled={!isHost || isRoomLoading || !activeRoom?.selectedGameId}
-              onClick={() => handleSelectCategory(category)}
+          <MotionLift key={category} delay={index * 0.03}>
+            <Panel
+              className={
+                activeRoom?.selectedCategory === category
+                  ? "border-flare/70 bg-flare/10"
+                  : index < 3
+                    ? "border-surge/35"
+                    : ""
+              }
             >
-              {activeRoom?.selectedCategory === category ? "Selected" : "Select"}
-            </Button>
-          </Panel>
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-lg font-black">{category}</p>
+                {activeRoom?.selectedCategory === category ? (
+                  <motion.span
+                    initial={{ scale: 0.6, rotate: -18 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 380, damping: 18 }}
+                  >
+                    <CheckCircle2 className="text-flare" size={22} />
+                  </motion.span>
+                ) : (
+                  <Circle className="text-white/24" size={18} />
+                )}
+              </div>
+              <Button
+                type="button"
+                tone={activeRoom?.selectedCategory === category ? "orange" : "ghost"}
+                className="mt-4 w-full"
+                disabled={!isHost || isRoomLoading || !activeRoom?.selectedGameId}
+                onClick={() => handleSelectCategory(category)}
+              >
+                {activeRoom?.selectedCategory === category ? "Selected" : "Select"}
+              </Button>
+            </Panel>
+          </MotionLift>
         ))}
       </div>
       <div className="mt-5">
@@ -942,6 +1041,11 @@ export function GameplayPage() {
       isActive: team.id === room.gameplay?.activeTeamId,
       tone: teamTone(team.id),
     })) ?? [];
+  const timerValue = remainingSeconds ?? room?.gameplay?.roundDurationSeconds ?? 0;
+  const timerProgress =
+    room?.gameplay?.roundDurationSeconds
+      ? Math.max(0, Math.min(100, (timerValue / room.gameplay.roundDurationSeconds) * 100))
+      : 100;
 
   useEffect(() => {
     if (!room?.gameplay?.roundEndsAt || room.gameplay.phase !== "playing") {
@@ -1043,7 +1147,7 @@ export function GameplayPage() {
                     </p>
                     <h2 className="mt-1 text-2xl font-black">{team.name}</h2>
                   </div>
-                  <p className="text-5xl font-black">{team.score}</p>
+                  <AnimatedScore value={team.score} className="text-5xl font-black" />
                 </div>
                 <p className="mt-3 text-sm font-bold text-white/54">
                   {team.correct} correct this game
@@ -1051,6 +1155,7 @@ export function GameplayPage() {
               </div>
             ))}
           </div>
+          <ScoreMeter red={room.gameplay.scores.red} blue={room.gameplay.scores.blue} />
           {activeTeamMembers.length ? (
             <div className="mb-5 flex flex-wrap justify-center gap-2">
               {activeTeamMembers.map((memberName) => (
@@ -1083,6 +1188,13 @@ export function GameplayPage() {
               {remainingSeconds === 0 ? "Time is up!" : `${remainingSeconds ?? room.gameplay.roundDurationSeconds}s`}
             </p>
           </div>
+          <div className="mx-auto mt-3 h-2 max-w-md overflow-hidden rounded-full bg-white/10">
+            <motion.div
+              className="h-full rounded-full bg-flare"
+              animate={{ width: `${timerProgress}%` }}
+              transition={{ duration: 0.25, ease: "linear" }}
+            />
+          </div>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {[
@@ -1095,7 +1207,7 @@ export function GameplayPage() {
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-white/42">
                   {label}
                 </p>
-                <p className="mt-2 text-3xl font-black">{value}</p>
+                <AnimatedScore value={value} className="mt-2 block text-3xl font-black" />
               </div>
             ))}
           </div>
@@ -1219,7 +1331,10 @@ export function RoundResultPage() {
               <p className="text-xs font-black uppercase tracking-[0.2em] text-white/42">
                 {label}
               </p>
-              <p className={`mt-2 text-4xl font-black ${label === "Score" ? "text-flare" : ""}`}>{value}</p>
+              <AnimatedScore
+                value={value}
+                className={`mt-2 block text-4xl font-black ${label === "Score" ? "text-flare" : ""}`}
+              />
             </div>
           ))}
         </div>
@@ -1324,6 +1439,11 @@ export function LeaderboardPage() {
     <PageScaffold title="Scoreboard Drama" eyebrow={activeRoom ? `Room ${activeRoom.code}` : "Leaderboard"}>
       <RoomFlowRail current="Scores" />
       <Panel>
+        {activeRoom?.gameplay ? (
+          <div className="mb-5">
+            <ScoreMeter red={activeRoom.gameplay.scores.red} blue={activeRoom.gameplay.scores.blue} />
+          </div>
+        ) : null}
         <div className="mb-5 grid gap-3 sm:grid-cols-3">
           <div className="rounded-lg border border-flare/25 bg-flare/10 p-4">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-flare">Leader</p>
@@ -1340,9 +1460,13 @@ export function LeaderboardPage() {
         </div>
         <div className="grid gap-3 md:grid-cols-2">
           {scores.map(([team, score, teamId, tone], index) => (
-            <div
+            <motion.div
               key={team as string}
               className={`rounded-lg border p-5 ${tone.border} ${index === 0 ? `${tone.bg} shadow-glow` : "bg-white/6"}`}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.06 }}
+              whileHover={{ y: -4, scale: 1.01 }}
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -1356,12 +1480,12 @@ export function LeaderboardPage() {
                 </span>
               </div>
               <div className="mt-5 flex items-end justify-between gap-3">
-                <span className={`text-6xl font-black ${tone.text}`}>{score}</span>
+                <AnimatedScore value={score} className={`text-6xl font-black ${tone.text}`} />
                 <span className="text-xs font-black uppercase tracking-[0.18em] text-white/38">
                   {teamId} Team
                 </span>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
         {error ? <p className="mt-4 text-sm font-bold text-punch">{error}</p> : null}
@@ -1452,10 +1576,26 @@ export function FinalWinnerPage() {
       subtitle={loserSubtitle}
     >
       <RoomFlowRail current="Scores" />
-      <Panel className="overflow-hidden text-center">
-        <div className="mx-auto grid size-24 place-items-center rounded-lg border border-flare/35 bg-flare/15 shadow-hot">
-          {isDraw ? <Sparkles className="text-flare" size={54} /> : <Crown className="text-flare" size={54} />}
+      <Panel className="relative overflow-hidden text-center">
+        <div className="pointer-events-none absolute inset-x-4 top-4 flex justify-between opacity-70">
+          {[0, 1, 2, 3, 4].map((item) => (
+            <motion.span
+              key={item}
+              className="h-8 w-2 rounded-sm bg-flare/60"
+              initial={{ y: -18, opacity: 0, rotate: 0 }}
+              animate={{ y: [0, 18, 8], opacity: [0, 1, 0.35], rotate: [0, 18, -12] }}
+              transition={{ delay: item * 0.09, duration: 1.1, repeat: Infinity, repeatDelay: 1.5 }}
+            />
+          ))}
         </div>
+        <motion.div
+          className="mx-auto grid size-24 place-items-center rounded-lg border border-flare/35 bg-flare/15 shadow-hot"
+          initial={{ scale: 0.72, rotate: -8 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: "spring", stiffness: 320, damping: 18 }}
+        >
+          {isDraw ? <Sparkles className="text-flare" size={54} /> : <Crown className="text-flare" size={54} />}
+        </motion.div>
         <p className="mt-5 text-xs font-black uppercase tracking-[0.26em] text-flare">
           {isDraw ? "Final Score" : "Winner Locked"}
         </p>
@@ -1468,12 +1608,16 @@ export function FinalWinnerPage() {
             : `${result?.winnerTeamName ?? "Winner"} takes this one. ${result?.loserTeamName ?? "The other team"} can run it back with a new game.`}
         </p>
         <div className="mt-7 grid gap-3 sm:grid-cols-2">
-          {finalScores.map((team) => (
-            <div
+          {finalScores.map((team, index) => (
+            <motion.div
               key={team.id}
               className={`rounded-lg border p-5 text-left ${team.tone.border} ${
                 team.isWinner || isDraw ? `${team.tone.bg} shadow-glow` : "bg-white/6"
               }`}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.08 + 0.12 }}
+              whileHover={{ y: -4, scale: 1.01 }}
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
@@ -1484,8 +1628,8 @@ export function FinalWinnerPage() {
                 </div>
                 {team.isWinner ? <Trophy className="text-flare" size={30} /> : null}
               </div>
-              <p className={`mt-5 text-6xl font-black ${team.tone.text}`}>{team.score}</p>
-            </div>
+              <AnimatedScore value={team.score} className={`mt-5 block text-6xl font-black ${team.tone.text}`} />
+            </motion.div>
           ))}
         </div>
         {error ? <p className="mt-4 text-sm font-bold text-punch">{error}</p> : null}

@@ -28,7 +28,7 @@ export function Button({
   className = "",
   ...props
 }: ButtonProps) {
-  const classes = `inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border px-5 py-3 text-sm font-black uppercase tracking-[0.14em] transition disabled:cursor-not-allowed disabled:opacity-45 ${tones[tone]} ${className}`;
+  const classes = `inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border px-5 py-3 text-sm font-black uppercase tracking-[0.14em] transition duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-45 ${tones[tone]} ${className}`;
 
   if (to) {
     if (props.disabled) {
