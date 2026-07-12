@@ -16,7 +16,11 @@ export type ThemeId =
   | "royal"
   | "daylight"
   | "sunset"
-  | "blossom";
+  | "blossom"
+  | "beige"
+  | "sky"
+  | "sage"
+  | "lilac";
 
 const THEME_KEY = "chaos-ka-adda-theme";
 
@@ -89,6 +93,34 @@ export const themes: Array<{
     description: "Soft pinks, violet ink, and garden green.",
     tone: "light",
     swatches: ["#D946EF", "#7C3AED", "#22C55E"],
+  },
+  {
+    id: "beige",
+    name: "Beige Studio",
+    description: "Soft beige paper with teal and clay contrast.",
+    tone: "light",
+    swatches: ["#E7D8C9", "#0F766E", "#C2410C"],
+  },
+  {
+    id: "sky",
+    name: "Sky Blue",
+    description: "Light blue air, navy text, and citrus accents.",
+    tone: "light",
+    swatches: ["#DDF4FF", "#1D4ED8", "#F59E0B"],
+  },
+  {
+    id: "sage",
+    name: "Sage Fresh",
+    description: "Calm green-gray with berry and teal contrast.",
+    tone: "light",
+    swatches: ["#EAF4EC", "#0F766E", "#BE185D"],
+  },
+  {
+    id: "lilac",
+    name: "Lilac Mist",
+    description: "Pale violet with indigo and coral accents.",
+    tone: "light",
+    swatches: ["#F3E8FF", "#4F46E5", "#F43F5E"],
   },
 ];
 

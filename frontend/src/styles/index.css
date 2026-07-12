@@ -166,6 +166,82 @@
   --color-line: 79 45 94;
 }
 
+:root[data-theme="beige"] {
+  color-scheme: light;
+  --color-ink: 248 241 232;
+  --color-void: 231 216 201;
+  --color-plasma: 126 34 206;
+  --color-surge: 15 118 110;
+  --color-punch: 190 24 93;
+  --color-flare: 194 65 12;
+  --color-lime: 77 124 15;
+  --color-grid: 120 92 70;
+  --backdrop-a: 231 216 201;
+  --backdrop-b: 15 118 110;
+  --backdrop-c: 214 196 176;
+  --color-foreground: 35 28 24;
+  --color-muted: 91 76 64;
+  --color-panel: 255 252 247;
+  --color-line: 85 65 47;
+}
+
+:root[data-theme="sky"] {
+  color-scheme: light;
+  --color-ink: 240 249 255;
+  --color-void: 221 244 255;
+  --color-plasma: 79 70 229;
+  --color-surge: 29 78 216;
+  --color-punch: 14 116 144;
+  --color-flare: 245 158 11;
+  --color-lime: 77 124 15;
+  --color-grid: 37 99 235;
+  --backdrop-a: 125 211 252;
+  --backdrop-b: 245 158 11;
+  --backdrop-c: 191 219 254;
+  --color-foreground: 15 31 58;
+  --color-muted: 58 82 116;
+  --color-panel: 255 255 255;
+  --color-line: 30 64 175;
+}
+
+:root[data-theme="sage"] {
+  color-scheme: light;
+  --color-ink: 244 250 245;
+  --color-void: 218 235 222;
+  --color-plasma: 101 80 160;
+  --color-surge: 15 118 110;
+  --color-punch: 190 24 93;
+  --color-flare: 180 83 9;
+  --color-lime: 22 101 52;
+  --color-grid: 15 118 110;
+  --backdrop-a: 134 239 172;
+  --backdrop-b: 15 118 110;
+  --backdrop-c: 187 215 194;
+  --color-foreground: 22 39 31;
+  --color-muted: 62 89 74;
+  --color-panel: 255 255 250;
+  --color-line: 31 94 73;
+}
+
+:root[data-theme="lilac"] {
+  color-scheme: light;
+  --color-ink: 250 245 255;
+  --color-void: 243 232 255;
+  --color-plasma: 79 70 229;
+  --color-surge: 124 58 237;
+  --color-punch: 244 63 94;
+  --color-flare: 217 119 6;
+  --color-lime: 22 163 74;
+  --color-grid: 124 58 237;
+  --backdrop-a: 216 180 254;
+  --backdrop-b: 244 63 94;
+  --backdrop-c: 221 214 254;
+  --color-foreground: 37 26 62;
+  --color-muted: 83 70 112;
+  --color-panel: 255 255 255;
+  --color-line: 91 62 151;
+}
+
 * {
   box-sizing: border-box;
 }
