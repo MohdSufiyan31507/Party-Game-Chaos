@@ -6,17 +6,17 @@
   color-scheme: dark;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
-  --color-ink: 7 8 23;
-  --color-void: 16 19 43;
-  --color-plasma: 182 55 255;
-  --color-surge: 32 217 255;
-  --color-punch: 255 63 143;
-  --color-flare: 255 157 46;
-  --color-lime: 77 255 145;
-  --color-grid: 255 255 255;
-  --backdrop-a: 182 55 255;
-  --backdrop-b: 32 217 255;
-  --backdrop-c: 30 16 47;
+  --color-ink: 5 7 24;
+  --color-void: 13 16 49;
+  --color-plasma: 124 92 255;
+  --color-surge: 0 229 255;
+  --color-punch: 255 79 216;
+  --color-flare: 255 203 77;
+  --color-lime: 112 255 122;
+  --color-grid: 140 120 255;
+  --backdrop-a: 124 92 255;
+  --backdrop-b: 0 229 255;
+  --backdrop-c: 18 12 66;
   background: #070817;
   color: #f8fbff;
 }
@@ -61,48 +61,6 @@
   --backdrop-a: 82 255 184;
   --backdrop-b: 54 163 255;
   --backdrop-c: 9 55 62;
-}
-
-:root[data-theme="bollywood"] {
-  --color-ink: 19 9 24;
-  --color-void: 48 20 48;
-  --color-plasma: 190 80 255;
-  --color-surge: 0 180 216;
-  --color-punch: 239 71 111;
-  --color-flare: 255 209 102;
-  --color-lime: 6 214 160;
-  --color-grid: 255 209 102;
-  --backdrop-a: 239 71 111;
-  --backdrop-b: 0 180 216;
-  --backdrop-c: 72 32 72;
-}
-
-:root[data-theme="midnight"] {
-  --color-ink: 4 7 18;
-  --color-void: 15 23 42;
-  --color-plasma: 139 92 246;
-  --color-surge: 56 189 248;
-  --color-punch: 244 114 182;
-  --color-flare: 165 180 252;
-  --color-lime: 94 234 212;
-  --color-grid: 148 163 184;
-  --backdrop-a: 139 92 246;
-  --backdrop-b: 56 189 248;
-  --backdrop-c: 30 27 75;
-}
-
-:root[data-theme="candy"] {
-  --color-ink: 22 8 30;
-  --color-void: 50 22 62;
-  --color-plasma: 255 110 199;
-  --color-surge: 69 224 255;
-  --color-punch: 255 89 164;
-  --color-flare: 249 248 113;
-  --color-lime: 127 255 178;
-  --color-grid: 255 175 220;
-  --backdrop-a: 255 110 199;
-  --backdrop-b: 69 224 255;
-  --backdrop-c: 68 28 82;
 }
 
 :root[data-theme="lava"] {

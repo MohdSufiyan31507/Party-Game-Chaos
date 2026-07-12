@@ -8,13 +8,9 @@ import {
 } from "react";
 
 export type ThemeId =
-  | "neon"
   | "arcade"
   | "mango"
   | "mint"
-  | "bollywood"
-  | "midnight"
-  | "candy"
   | "lava"
   | "ocean"
   | "royal";
@@ -27,12 +23,6 @@ export const themes: Array<{
   description: string;
   swatches: string[];
 }> = [
-  {
-    id: "neon",
-    name: "Neon Chaos",
-    description: "Classic pink, cyan, and arcade glow.",
-    swatches: ["#20D9FF", "#FF3F8F", "#FF9D2E"],
-  },
   {
     id: "arcade",
     name: "Arcade Night",
@@ -50,24 +40,6 @@ export const themes: Array<{
     name: "Cyber Mint",
     description: "Cool greens, clean blues, and crisp glow.",
     swatches: ["#52FFB8", "#36A3FF", "#E8FF5A"],
-  },
-  {
-    id: "bollywood",
-    name: "Bollywood Bash",
-    description: "Gold, rose, and peacock-blue party lights.",
-    swatches: ["#FFD166", "#EF476F", "#00B4D8"],
-  },
-  {
-    id: "midnight",
-    name: "Midnight Club",
-    description: "Moody violet with icy blue highlights.",
-    swatches: ["#8B5CF6", "#38BDF8", "#F472B6"],
-  },
-  {
-    id: "candy",
-    name: "Candy Rush",
-    description: "Bubblegum, lemon, and electric blue.",
-    swatches: ["#FF6EC7", "#F9F871", "#45E0FF"],
   },
   {
     id: "lava",
@@ -103,7 +75,7 @@ function isThemeId(value: string | null): value is ThemeId {
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<ThemeId>(() => {
     const savedTheme = localStorage.getItem(THEME_KEY);
-    return isThemeId(savedTheme) ? savedTheme : "neon";
+    return isThemeId(savedTheme) ? savedTheme : "arcade";
   });
 
   useEffect(() => {
