@@ -313,6 +313,21 @@ textarea {
   color: #ffffff !important;
 }
 
+.dark-stage .stage-title {
+  color: #ffffff !important;
+  text-shadow:
+    0 0 28px rgb(0 229 255 / 0.12),
+    0 10px 40px rgb(0 0 0 / 0.34);
+}
+
+.dark-stage .stage-copy {
+  color: rgb(255 255 255 / 0.76) !important;
+}
+
+.dark-stage .stage-eyebrow {
+  color: rgb(var(--color-surge)) !important;
+}
+
 :root[data-tone="light"] .text-white\/24,
 :root[data-tone="light"] .text-white\/30,
 :root[data-tone="light"] .text-white\/38,
@@ -375,6 +390,18 @@ textarea {
 .dark-stage .text-white\/70,
 .dark-stage .text-white\/80 {
   color: rgb(255 255 255 / 0.68) !important;
+}
+
+:root[data-tone="light"] .dark-stage .stage-title {
+  color: #ffffff !important;
+}
+
+:root[data-tone="light"] .dark-stage .stage-copy {
+  color: rgb(255 255 255 / 0.76) !important;
+}
+
+:root[data-tone="light"] .dark-stage .stage-eyebrow {
+  color: rgb(var(--color-surge)) !important;
 }
 
 :root[data-tone="light"] .bg-white\/5,

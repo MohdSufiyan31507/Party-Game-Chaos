@@ -21,14 +21,14 @@ export function AuthLayout({
               <span className="grid size-12 place-items-center rounded-lg border border-surge/40 bg-surge/15 text-surge shadow-glow">
                 <Sparkles size={24} aria-hidden="true" />
               </span>
-              <span className="font-black uppercase tracking-[0.2em] text-white/62">
+              <span className="stage-copy font-black uppercase tracking-[0.2em]">
                 The Chaos Games
               </span>
             </Link>
-            <h1 className="mt-8 max-w-xl text-5xl font-black leading-none sm:text-7xl">
+            <h1 className="stage-title mt-8 max-w-xl text-5xl font-black leading-none sm:text-7xl">
               {title}
             </h1>
-            <p className="mt-5 max-w-lg text-lg leading-8 text-white/68">
+            <p className="stage-copy mt-5 max-w-lg text-lg leading-8">
               {subtitle}
             </p>
           </div>

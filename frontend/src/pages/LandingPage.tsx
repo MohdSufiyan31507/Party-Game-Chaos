@@ -9,13 +9,13 @@ export function LandingPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(182,55,255,0.32),transparent_28%),radial-gradient(circle_at_78%_12%,rgba(255,157,46,0.20),transparent_30%),linear-gradient(135deg,#070817,#15113A_55%,#25112A)]" />
         <div className="page-grid absolute inset-0 bg-grid opacity-45" />
         <div className="relative mx-auto w-full max-w-6xl">
-          <p className="text-xs font-black uppercase tracking-[0.32em] text-surge">
+          <p className="stage-eyebrow text-xs font-black uppercase tracking-[0.32em]">
             Chaos Ka Adda
           </p>
-          <h1 className="mt-5 max-w-4xl text-5xl font-black leading-none sm:text-7xl lg:text-8xl">
+          <h1 className="stage-title mt-5 max-w-4xl text-5xl font-black leading-none sm:text-7xl lg:text-8xl">
             Party games with score drama and neon nonsense.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-white/68">
+          <p className="stage-copy mt-6 max-w-2xl text-lg leading-8">
             Live multiplayer rooms, guest runs, account login, team-vs-team scoring,
             and realtime party game chaos.
           </p>

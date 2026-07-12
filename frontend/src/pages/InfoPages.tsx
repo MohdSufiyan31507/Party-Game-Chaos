@@ -204,9 +204,9 @@ export function NotFoundPage() {
   return (
     <main className="dark-stage grid min-h-screen place-items-center bg-[#070817] px-4 text-center text-white">
       <section>
-        <p className="text-xs font-black uppercase tracking-[0.3em] text-punch">404</p>
-        <h1 className="mt-4 text-5xl font-black">Wrong room code.</h1>
-        <p className="mx-auto mt-4 max-w-xl text-white/62">This route left the lobby before readying up.</p>
+        <p className="stage-eyebrow text-xs font-black uppercase tracking-[0.3em]">404</p>
+        <h1 className="stage-title mt-4 text-5xl font-black">Wrong room code.</h1>
+        <p className="stage-copy mx-auto mt-4 max-w-xl">This route left the lobby before readying up.</p>
         <Button to="/home" icon={Home} tone="cyan" className="mt-8">
           Back Home
         </Button>

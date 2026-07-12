@@ -18,16 +18,16 @@ export function SplashPage() {
           alt="Chaos Ka Adda genie mascot holding chaos cards"
           className="mx-auto mb-6 h-64 w-64 rounded-lg object-contain drop-shadow-[0_0_42px_rgba(182,55,255,0.45)] sm:h-80 sm:w-80"
         />
-        <p className="text-sm font-black uppercase tracking-[0.38em] text-white/55">
+        <p className="stage-copy text-sm font-black uppercase tracking-[0.38em]">
           Presented by
         </p>
-        <p className="mt-4 text-2xl font-black uppercase tracking-[0.24em] text-surge sm:text-4xl">
+        <p className="stage-eyebrow mt-4 text-2xl font-black uppercase tracking-[0.24em] sm:text-4xl">
           The Chaos Games
         </p>
         <h1 className="sr-only">
           Chaos Ka Adda
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/68">
+        <p className="stage-copy mx-auto mt-6 max-w-2xl text-lg leading-8">
           Meet the genie mascot of the Adda, your chaos dealer for rooms, teams,
           chaos cards, scoring drama, and post-2000 pop-culture games.
         </p>
