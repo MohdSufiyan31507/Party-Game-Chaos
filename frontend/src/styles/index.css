@@ -17,6 +17,10 @@
   --backdrop-a: 124 92 255;
   --backdrop-b: 0 229 255;
   --backdrop-c: 18 12 66;
+  --color-foreground: 248 251 255;
+  --color-muted: 190 199 220;
+  --color-panel: 255 255 255;
+  --color-line: 255 255 255;
   background: #070817;
   color: #f8fbff;
 }
@@ -105,6 +109,63 @@
   --backdrop-c: 52 24 89;
 }
 
+:root[data-theme="daylight"] {
+  color-scheme: light;
+  --color-ink: 244 248 255;
+  --color-void: 225 236 255;
+  --color-plasma: 124 58 237;
+  --color-surge: 37 99 235;
+  --color-punch: 219 39 119;
+  --color-flare: 249 115 22;
+  --color-lime: 101 163 13;
+  --color-grid: 37 99 235;
+  --backdrop-a: 37 99 235;
+  --backdrop-b: 132 204 22;
+  --backdrop-c: 219 234 254;
+  --color-foreground: 18 24 38;
+  --color-muted: 80 91 117;
+  --color-panel: 255 255 255;
+  --color-line: 39 52 85;
+}
+
+:root[data-theme="sunset"] {
+  color-scheme: light;
+  --color-ink: 255 247 237;
+  --color-void: 255 237 213;
+  --color-plasma: 217 70 239;
+  --color-surge: 8 145 178;
+  --color-punch: 225 29 72;
+  --color-flare: 245 158 11;
+  --color-lime: 22 163 74;
+  --color-grid: 251 113 133;
+  --backdrop-a: 251 113 133;
+  --backdrop-b: 6 182 212;
+  --backdrop-c: 254 215 170;
+  --color-foreground: 38 23 28;
+  --color-muted: 99 73 82;
+  --color-panel: 255 255 255;
+  --color-line: 92 46 54;
+}
+
+:root[data-theme="blossom"] {
+  color-scheme: light;
+  --color-ink: 253 244 255;
+  --color-void: 245 232 255;
+  --color-plasma: 124 58 237;
+  --color-surge: 8 145 178;
+  --color-punch: 217 70 239;
+  --color-flare: 234 88 12;
+  --color-lime: 34 197 94;
+  --color-grid: 217 70 239;
+  --backdrop-a: 217 70 239;
+  --backdrop-b: 34 197 94;
+  --backdrop-c: 233 213 255;
+  --color-foreground: 34 21 46;
+  --color-muted: 87 69 99;
+  --color-panel: 255 255 255;
+  --color-line: 79 45 94;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -114,6 +175,10 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+:root[data-tone="light"] {
+  color: rgb(var(--color-foreground));
 }
 
 button,
@@ -131,6 +196,60 @@ textarea {
     rgba(255, 255, 255, 0.045)
   );
   backdrop-filter: blur(18px);
+}
+
+:root[data-tone="light"] .chaos-surface {
+  border-color: rgb(var(--color-line) / 0.14);
+  background: linear-gradient(
+    145deg,
+    rgb(var(--color-panel) / 0.9),
+    rgb(var(--color-panel) / 0.62)
+  );
+}
+
+:root[data-tone="light"] .text-white {
+  color: rgb(var(--color-foreground)) !important;
+}
+
+:root[data-tone="light"] .text-white\/24,
+:root[data-tone="light"] .text-white\/30,
+:root[data-tone="light"] .text-white\/38,
+:root[data-tone="light"] .text-white\/40,
+:root[data-tone="light"] .text-white\/42,
+:root[data-tone="light"] .text-white\/44,
+:root[data-tone="light"] .text-white\/45,
+:root[data-tone="light"] .text-white\/46,
+:root[data-tone="light"] .text-white\/48,
+:root[data-tone="light"] .text-white\/50,
+:root[data-tone="light"] .text-white\/54,
+:root[data-tone="light"] .text-white\/55,
+:root[data-tone="light"] .text-white\/56,
+:root[data-tone="light"] .text-white\/58,
+:root[data-tone="light"] .text-white\/62,
+:root[data-tone="light"] .text-white\/64,
+:root[data-tone="light"] .text-white\/66,
+:root[data-tone="light"] .text-white\/68,
+:root[data-tone="light"] .text-white\/70,
+:root[data-tone="light"] .text-white\/80 {
+  color: rgb(var(--color-muted)) !important;
+}
+
+:root[data-tone="light"] .bg-white\/5,
+:root[data-tone="light"] .bg-white\/6,
+:root[data-tone="light"] .bg-white\/8,
+:root[data-tone="light"] .bg-white\/10,
+:root[data-tone="light"] .bg-white\/12 {
+  background-color: rgb(var(--color-panel) / 0.72) !important;
+}
+
+:root[data-tone="light"] .border-white\/10,
+:root[data-tone="light"] .border-white\/12 {
+  border-color: rgb(var(--color-line) / 0.14) !important;
+}
+
+:root[data-tone="light"] input::placeholder,
+:root[data-tone="light"] textarea::placeholder {
+  color: rgb(var(--color-muted) / 0.62) !important;
 }
 
 .page-grid {

@@ -13,7 +13,10 @@ export type ThemeId =
   | "mint"
   | "lava"
   | "ocean"
-  | "royal";
+  | "royal"
+  | "daylight"
+  | "sunset"
+  | "blossom";
 
 const THEME_KEY = "chaos-ka-adda-theme";
 
@@ -21,43 +24,71 @@ export const themes: Array<{
   id: ThemeId;
   name: string;
   description: string;
+  tone: "dark" | "light";
   swatches: string[];
 }> = [
   {
     id: "arcade",
     name: "Arcade Night",
     description: "Deeper blues with electric violet.",
+    tone: "dark",
     swatches: ["#7C5CFF", "#00E5FF", "#FF4FD8"],
   },
   {
     id: "mango",
     name: "Mango Pop",
     description: "Warm party energy with punchy contrast.",
+    tone: "dark",
     swatches: ["#FFB000", "#FF4D6D", "#3BE8B0"],
   },
   {
     id: "mint",
     name: "Cyber Mint",
     description: "Cool greens, clean blues, and crisp glow.",
+    tone: "dark",
     swatches: ["#52FFB8", "#36A3FF", "#E8FF5A"],
   },
   {
     id: "lava",
     name: "Lava Mode",
     description: "Hot reds, amber sparks, and danger glow.",
+    tone: "dark",
     swatches: ["#FF3B30", "#FF9500", "#FFE66D"],
   },
   {
     id: "ocean",
     name: "Ocean Pulse",
     description: "Deep sea blues with aqua and seafoam.",
+    tone: "dark",
     swatches: ["#00C2FF", "#00F5D4", "#90F1EF"],
   },
   {
     id: "royal",
     name: "Royal Chaos",
     description: "Regal purple, gold, and jewel green.",
+    tone: "dark",
     swatches: ["#C084FC", "#FACC15", "#34D399"],
+  },
+  {
+    id: "daylight",
+    name: "Daylight Pop",
+    description: "Bright sky, clean paper, and fresh lime.",
+    tone: "light",
+    swatches: ["#2563EB", "#F97316", "#84CC16"],
+  },
+  {
+    id: "sunset",
+    name: "Sunset Glow",
+    description: "Warm peach, coral, and pool-blue highlights.",
+    tone: "light",
+    swatches: ["#FB7185", "#F59E0B", "#06B6D4"],
+  },
+  {
+    id: "blossom",
+    name: "Blossom Day",
+    description: "Soft pinks, violet ink, and garden green.",
+    tone: "light",
+    swatches: ["#D946EF", "#7C3AED", "#22C55E"],
   },
 ];
 
@@ -72,6 +103,10 @@ function isThemeId(value: string | null): value is ThemeId {
   return themes.some((theme) => theme.id === value);
 }
 
+function themeTone(themeId: ThemeId) {
+  return themes.find((theme) => theme.id === themeId)?.tone ?? "dark";
+}
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<ThemeId>(() => {
     const savedTheme = localStorage.getItem(THEME_KEY);
@@ -80,6 +115,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
+    document.documentElement.dataset.tone = themeTone(theme);
     localStorage.setItem(THEME_KEY, theme);
   }, [theme]);
 
