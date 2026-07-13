@@ -2,6 +2,7 @@ import { Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "../components/ui/Button";
 import { ChaosCardLogo } from "../components/ui/ChaosCardLogo";
+import { PartyBackground } from "../components/ui/PartyBackground";
 
 const promptCards = ["Act", "Guess", "Roast", "Buzz"];
 
@@ -10,6 +11,7 @@ export function SplashPage() {
     <main className="dark-stage relative grid min-h-screen place-items-center overflow-hidden bg-[#070817] px-4 text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_14%,rgba(32,217,255,0.26),transparent_28%),radial-gradient(circle_at_76%_22%,rgba(255,203,77,0.18),transparent_26%),radial-gradient(circle_at_52%_82%,rgba(255,63,143,0.26),transparent_32%),linear-gradient(135deg,#070817,#18133A_58%,#25112A)]" />
       <div className="page-grid absolute inset-0 bg-grid opacity-40" />
+      <PartyBackground />
       <motion.section
         className="relative z-10 grid w-full max-w-6xl gap-10 py-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-center"
         initial={{ opacity: 0, y: 18 }}

@@ -14,6 +14,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { themes, useTheme, type ThemeId } from "../../contexts/ThemeContext";
 import { narratorFor } from "../../utils/narrator";
 import { ChaosCardLogo } from "../ui/ChaosCardLogo";
+import { PartyBackground } from "../ui/PartyBackground";
 
 const navItems = [
   { label: "Adda", href: "/home", icon: Home },
@@ -91,9 +92,10 @@ export function AppLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-ink pb-24 text-white lg:pb-0">
-      <div className="theme-backdrop fixed inset-0 -z-10 transition duration-500" />
-      <div className="page-grid fixed inset-0 -z-10 bg-grid opacity-45" />
+    <div className="relative isolate min-h-screen overflow-hidden bg-ink pb-24 text-white lg:pb-0">
+      <div className="theme-backdrop fixed inset-0 z-0 transition duration-500" />
+      <div className="page-grid fixed inset-0 z-0 bg-grid opacity-45" />
+      <PartyBackground />
 
       <header className="sticky top-0 z-30 border-b border-white/10 bg-ink/75 shadow-[0_12px_34px_rgb(0_0_0/0.18)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
@@ -139,7 +141,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[1fr_280px]">
+      <div className="relative z-10 mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[1fr_280px]">
         <div>{children}</div>
         <aside className="hidden lg:block">
           <div className="chaos-surface show-panel sticky top-24 rounded-lg p-5">

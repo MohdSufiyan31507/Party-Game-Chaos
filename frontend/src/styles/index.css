@@ -548,12 +548,211 @@ textarea {
     0 0 44px rgb(var(--color-punch) / 0.22);
 }
 
+.party-background {
+  pointer-events: none;
+  opacity: 0.86;
+}
+
+.party-card,
+.party-confetti,
+.party-spark {
+  position: absolute;
+  display: block;
+}
+
+.party-card {
+  width: 54px;
+  height: 74px;
+  border: 1px solid rgb(var(--color-line) / 0.12);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgb(var(--color-panel) / 0.22), rgb(var(--color-panel) / 0.04)),
+    radial-gradient(circle at 50% 38%, rgb(var(--color-flare) / 0.42), transparent 20%);
+  box-shadow:
+    0 18px 44px rgb(0 0 0 / 0.14),
+    inset 0 1px 0 rgb(255 255 255 / 0.14);
+}
+
+.party-card::before {
+  content: "";
+  position: absolute;
+  inset: 11px 13px auto;
+  height: 18px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgb(var(--color-surge)), rgb(var(--color-punch)));
+  opacity: 0.76;
+}
+
+.party-card::after {
+  content: "CA";
+  position: absolute;
+  inset: auto 10px 9px;
+  color: rgb(var(--color-foreground) / 0.58);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-align: center;
+}
+
+.party-card-a {
+  left: 7%;
+  top: 18%;
+  transform: rotate(-14deg);
+  animation: card-float-a 13s ease-in-out infinite;
+}
+
+.party-card-b {
+  right: 9%;
+  top: 22%;
+  transform: rotate(12deg) scale(0.86);
+  animation: card-float-b 16s ease-in-out infinite;
+}
+
+.party-card-c {
+  left: 12%;
+  bottom: 12%;
+  transform: rotate(18deg) scale(0.72);
+  animation: card-float-c 18s ease-in-out infinite;
+}
+
+.party-confetti {
+  width: 12px;
+  height: 30px;
+  border-radius: 999px;
+  opacity: 0.72;
+  animation: confetti-hover 9s ease-in-out infinite;
+}
+
+.party-confetti-a {
+  left: 18%;
+  top: 28%;
+  background: rgb(var(--color-flare));
+}
+
+.party-confetti-b {
+  left: 74%;
+  top: 18%;
+  background: rgb(var(--color-punch));
+  animation-delay: -2s;
+}
+
+.party-confetti-c {
+  left: 83%;
+  bottom: 24%;
+  background: rgb(var(--color-surge));
+  animation-delay: -4s;
+}
+
+.party-confetti-d {
+  left: 36%;
+  bottom: 18%;
+  background: rgb(var(--color-lime));
+  animation-delay: -1.2s;
+}
+
+.party-confetti-e {
+  right: 24%;
+  top: 55%;
+  background: rgb(var(--color-plasma));
+  animation-delay: -5s;
+}
+
+.party-spark {
+  width: 80px;
+  height: 80px;
+  color: rgb(var(--color-flare));
+  opacity: 0.34;
+  animation: spark-pulse 5.5s ease-in-out infinite;
+}
+
+.party-spark::before,
+.party-spark::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 54px;
+  height: 4px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+}
+
+.party-spark::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.party-spark-a {
+  right: 18%;
+  bottom: 14%;
+}
+
+.party-spark-b {
+  left: 42%;
+  top: 16%;
+  color: rgb(var(--color-surge));
+  transform: scale(0.72) rotate(45deg);
+  animation-delay: -2.8s;
+}
+
 @keyframes stage-pan {
   from {
     background-position: 0% 0%;
   }
   to {
     background-position: 100% 60%;
+  }
+}
+
+@keyframes card-float-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-14deg);
+  }
+  50% {
+    transform: translate3d(18px, -24px, 0) rotate(-5deg);
+  }
+}
+
+@keyframes card-float-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(12deg) scale(0.86);
+  }
+  50% {
+    transform: translate3d(-20px, 28px, 0) rotate(21deg) scale(0.86);
+  }
+}
+
+@keyframes card-float-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(18deg) scale(0.72);
+  }
+  50% {
+    transform: translate3d(26px, -16px, 0) rotate(8deg) scale(0.72);
+  }
+}
+
+@keyframes confetti-hover {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-34px) rotate(18deg);
+  }
+}
+
+@keyframes spark-pulse {
+  0%,
+  100% {
+    opacity: 0.18;
+    transform: scale(0.7) rotate(0deg);
+  }
+  50% {
+    opacity: 0.46;
+    transform: scale(1) rotate(22deg);
   }
 }
 
@@ -588,7 +787,10 @@ textarea {
 @media (prefers-reduced-motion: reduce) {
   .page-grid,
   .theme-backdrop,
-  .show-title {
+  .show-title,
+  .party-card,
+  .party-confetti,
+  .party-spark {
     animation: none;
   }
 

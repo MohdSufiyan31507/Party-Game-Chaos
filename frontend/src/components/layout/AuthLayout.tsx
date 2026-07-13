@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ChaosCardLogo } from "../ui/ChaosCardLogo";
+import { PartyBackground } from "../ui/PartyBackground";
 
 export function AuthLayout({
   title,
@@ -12,9 +13,10 @@ export function AuthLayout({
   children: ReactNode;
 }) {
   return (
-    <main className="dark-stage min-h-screen bg-[#070817] text-white">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_20%_15%,rgba(255,63,143,0.28),transparent_32%),radial-gradient(circle_at_85%_12%,rgba(77,255,145,0.16),transparent_28%),linear-gradient(135deg,#070817,#17123A)]" />
-      <div className="mx-auto flex min-h-screen max-w-6xl items-center px-4 py-8">
+    <main className="dark-stage relative isolate min-h-screen overflow-hidden bg-[#070817] text-white">
+      <div className="fixed inset-0 z-0 bg-[radial-gradient(circle_at_20%_15%,rgba(255,63,143,0.28),transparent_32%),radial-gradient(circle_at_85%_12%,rgba(77,255,145,0.16),transparent_28%),linear-gradient(135deg,#070817,#17123A)]" />
+      <PartyBackground />
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl items-center px-4 py-8">
         <section className="grid w-full gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div>
             <Link to="/landing" className="inline-flex items-center gap-3">

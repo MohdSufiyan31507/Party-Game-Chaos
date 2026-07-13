@@ -1,6 +1,7 @@
 import { LogIn, Play, UserPlus } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { PageTransition } from "../components/ui/PageTransition";
+import { PartyBackground } from "../components/ui/PartyBackground";
 
 export function LandingPage() {
   return (
@@ -8,7 +9,8 @@ export function LandingPage() {
       <section className="relative grid min-h-screen content-center overflow-hidden px-4 py-12">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(182,55,255,0.32),transparent_28%),radial-gradient(circle_at_78%_12%,rgba(255,157,46,0.20),transparent_30%),linear-gradient(135deg,#070817,#15113A_55%,#25112A)]" />
         <div className="page-grid absolute inset-0 bg-grid opacity-45" />
-        <div className="relative mx-auto w-full max-w-6xl">
+        <PartyBackground />
+        <div className="relative z-10 mx-auto w-full max-w-6xl">
           <p className="stage-eyebrow text-xs font-black uppercase tracking-[0.32em]">
             Chaos Ka Adda
           </p>
