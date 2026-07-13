@@ -135,6 +135,51 @@ function AnimatedScore({
   );
 }
 
+function EditActionBar({ children }: { children: ReactNode }) {
+  return (
+    <motion.div
+      className="mt-5 flex flex-wrap gap-3"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.08, duration: 0.28, ease: "easeOut" }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function EditableChoiceCue({
+  gameName,
+  category,
+}: {
+  gameName?: string;
+  category?: string;
+}) {
+  return (
+    <motion.div
+      className="mb-5 grid gap-3 sm:grid-cols-2"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.26, ease: "easeOut" }}
+    >
+      <motion.div
+        className="show-stat rounded-lg border border-surge/25 bg-surge/10 p-4"
+        whileHover={{ y: -3, scale: 1.01 }}
+      >
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-surge">Game</p>
+        <p className="mt-1 truncate text-2xl font-black">{gameName ?? "Pick one"}</p>
+      </motion.div>
+      <motion.div
+        className="show-stat rounded-lg border border-flare/25 bg-flare/10 p-4"
+        whileHover={{ y: -3, scale: 1.01 }}
+      >
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-flare">Category</p>
+        <p className="mt-1 truncate text-2xl font-black">{category ?? "Editable until play"}</p>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 function ScoreMeter({ red, blue }: { red: number; blue: number }) {
   const total = Math.max(red + blue, 1);
   const redWidth = `${Math.max(8, (red / total) * 100)}%`;
@@ -849,6 +894,10 @@ export function CategorySelectionPage() {
       subtitle={activeRoom?.selectedCategory ? `Selected: ${activeRoom.selectedCategory}` : undefined}
     >
       <RoomFlowRail current="Category" />
+      <EditableChoiceCue
+        gameName={selectedGame?.name}
+        category={activeRoom?.selectedCategory}
+      />
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((category, index) => (
           <MotionLift key={category} delay={index * 0.03}>
@@ -899,14 +948,14 @@ export function CategorySelectionPage() {
       {!isHost ? (
         <p className="mt-4 text-sm font-bold text-white/48">Only the host can choose the category.</p>
       ) : null}
-      <div className="mt-5 flex flex-wrap gap-3">
+      <EditActionBar>
         <Button to="/games" tone="ghost" icon={Gamepad2}>
           Change Game
         </Button>
         <Button to="/intro" disabled={!activeRoom?.selectedCategory}>
           Lock Categories
         </Button>
-      </div>
+      </EditActionBar>
     </PageScaffold>
   );
 }
@@ -959,6 +1008,10 @@ export function GameIntroPage() {
     >
       <RoomFlowRail current="Play" />
       <Panel>
+        <EditableChoiceCue
+          gameName={game.name}
+          category={activeRoom?.selectedCategory}
+        />
         <StatusNote tone={game.status === "MVP" ? (isHost ? "success" : "info") : "warn"}>
           {game.status !== "MVP"
             ? "This future game is in the library, but the live version is not turned on yet."
@@ -978,16 +1031,23 @@ export function GameIntroPage() {
         <p className="mt-4 max-w-2xl leading-7 text-white/66">{game.description}</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {game.rules.map((rule, index) => (
-            <div key={rule} className="rounded-lg border border-white/10 bg-white/6 p-4 font-black">
+            <motion.div
+              key={rule}
+              className="rounded-lg border border-white/10 bg-white/6 p-4 font-black"
+              initial={{ opacity: 0, y: 14, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: index * 0.06, duration: 0.24, ease: "easeOut" }}
+              whileHover={{ y: -3, scale: 1.01 }}
+            >
               <span className="mb-3 grid size-8 place-items-center rounded-lg border border-lime/25 bg-lime/10 text-sm text-lime">
                 {index + 1}
               </span>
               {rule}
-            </div>
+            </motion.div>
           ))}
         </div>
         {error ? <p className="mt-4 text-sm font-bold text-punch">{error}</p> : null}
-        <div className="mt-6 flex flex-wrap gap-3">
+        <EditActionBar>
           <Button to="/games" tone="ghost" icon={Gamepad2}>
             Change Game
           </Button>
@@ -1001,7 +1061,7 @@ export function GameIntroPage() {
           >
             {isRoomLoading ? "Starting" : "Start Game"}
           </Button>
-        </div>
+        </EditActionBar>
         {!canStartLiveGame && isHost ? (
           <p className="mt-3 text-sm font-bold text-flare">
             Choose a Play Live game and category before starting.
