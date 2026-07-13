@@ -23,7 +23,7 @@ export type ThemeId =
   | "lilac";
 
 const THEME_KEY = "chaos-ka-adda-theme";
-const DEFAULT_THEME: ThemeId = "arcade";
+const DEFAULT_THEME: ThemeId = "royal";
 
 export const themes: Array<{
   id: ThemeId;
