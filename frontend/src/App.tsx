@@ -30,6 +30,9 @@ export default function App() {
     const code = activeRoom.code;
     let nextPath = `/lobby/${code}`;
 
+    const canEditGame = location.pathname.startsWith("/games");
+    const canEditCategory = location.pathname.startsWith("/categories");
+
     if (activeRoom.finalResult || activeRoom.status === "closed") {
       nextPath = `/winner/${code}`;
     } else if (activeRoom.gameplay?.isActive && activeRoom.gameplay.phase === "playing") {
@@ -38,9 +41,11 @@ export default function App() {
       if (location.pathname.startsWith("/leaderboard")) return;
       nextPath = `/round-result/${code}`;
     } else if (activeRoom.selectedCategory) {
-      nextPath = "/intro";
+      const canReviewChoices =
+        canEditGame || canEditCategory || location.pathname.startsWith("/intro");
+      nextPath = canReviewChoices ? location.pathname : "/intro";
     } else if (activeRoom.selectedGameId) {
-      nextPath = "/categories";
+      nextPath = canEditGame || canEditCategory ? location.pathname : "/categories";
     } else if (activeRoom.status === "game-selection") {
       nextPath = "/games";
     } else if (activeRoom.status === "team-setup") {

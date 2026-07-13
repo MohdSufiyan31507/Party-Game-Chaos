@@ -696,6 +696,11 @@ export function GameSelectionPage() {
       return;
     }
 
+    if (activeRoom.selectedGameId === gameId) {
+      navigate("/categories");
+      return;
+    }
+
     setError("");
 
     try {
@@ -894,9 +899,14 @@ export function CategorySelectionPage() {
       {!isHost ? (
         <p className="mt-4 text-sm font-bold text-white/48">Only the host can choose the category.</p>
       ) : null}
-      <Button to="/intro" className="mt-5" disabled={!activeRoom?.selectedCategory}>
-        Lock Categories
-      </Button>
+      <div className="mt-5 flex flex-wrap gap-3">
+        <Button to="/games" tone="ghost" icon={Gamepad2}>
+          Change Game
+        </Button>
+        <Button to="/intro" disabled={!activeRoom?.selectedCategory}>
+          Lock Categories
+        </Button>
+      </div>
     </PageScaffold>
   );
 }
@@ -977,18 +987,25 @@ export function GameIntroPage() {
           ))}
         </div>
         {error ? <p className="mt-4 text-sm font-bold text-punch">{error}</p> : null}
-        <Button
-          type="button"
-          className="mt-6"
-          disabled={!isHost || isRoomLoading || !canStartLiveGame}
-          onClick={handleStartGameplay}
-        >
-          {isRoomLoading ? "Starting" : "Start Game"}
-        </Button>
-        {!canStartLiveGame && isHost ? (
-          <Button to="/games" tone="ghost" className="ml-0 mt-3 sm:ml-3">
-            Choose Play Live Game
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Button to="/games" tone="ghost" icon={Gamepad2}>
+            Change Game
           </Button>
+          <Button to="/categories" tone="purple" icon={ListChecks}>
+            Change Category
+          </Button>
+          <Button
+            type="button"
+            disabled={!isHost || isRoomLoading || !canStartLiveGame}
+            onClick={handleStartGameplay}
+          >
+            {isRoomLoading ? "Starting" : "Start Game"}
+          </Button>
+        </div>
+        {!canStartLiveGame && isHost ? (
+          <p className="mt-3 text-sm font-bold text-flare">
+            Choose a Play Live game and category before starting.
+          </p>
         ) : null}
         {!isHost ? (
           <p className="mt-3 text-sm font-bold text-white/48">Only the host can start the game.</p>
